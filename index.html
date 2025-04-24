@@ -1,0 +1,301 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCF Vocabulary Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-4">TCF Vocabulary Flashcards</h1>
+        <div id="flashcard" class="bg-blue-100 p-6 rounded-lg text-center text-xl font-semibold h-40 flex items-center justify-center cursor-pointer" onclick="flipCard()">
+            <span id="cardContent">Click to start</span>
+        </div>
+        <div class="flex justify-between mt-4">
+            <button id="prevBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" onclick="prevCard()" disabled>Previous</button>
+            <button id="pronounceBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="playPronunciation()">Play Pronunciation</button>
+            <button id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="nextCard()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        // TCF vocabulary list (French word: English translation, 200 words)
+        const vocabulary = [
+            { french: "bonjour", english: "hello" },
+            { french: "merci", english: "thank you" },
+            { french: "s'il vous plaît", english: "please" },
+            { french: "au revoir", english: "goodbye" },
+            { french: "livre", english: "book" },
+            { french: "maison", english: "house" },
+            { french: "école", english: "school" },
+            { french: "ami", english: "friend" },
+            { french: "travailler", english: "to work" },
+            { french: "manger", english: "to eat" },
+            { french: "voiture", english: "car" },
+            { french: "famille", english: "family" },
+            { french: "temps", english: "time" },
+            { french: "jour", english: "day" },
+            { french: "nuit", english: "night" },
+            { french: "eau", english: "water" },
+            { french: "pain", english: "bread" },
+            { french: "fromage", english: "cheese" },
+            { french: "vin", english: "wine" },
+            { french: "café", english: "coffee" },
+            { french: "thé", english: "tea" },
+            { french: "jardin", english: "garden" },
+            { french: "fleur", english: "flower" },
+            { french: "arbre", english: "tree" },
+            { french: "ciel", english: "sky" },
+            { french: "soleil", english: "sun" },
+            { french: "lune", english: "moon" },
+            { french: "étoile", english: "star" },
+            { french: "mer", english: "sea" },
+            { french: "montagne", english: "mountain" },
+            { french: "rivière", english: "river" },
+            { french: "ville", english: "city" },
+            { french: "village", english: "village" },
+            { french: "rue", english: "street" },
+            { french: "pont", english: "bridge" },
+            { french: "magasin", english: "shop" },
+            { french: "marché", english: "market" },
+            { french: "boulangerie", english: "bakery" },
+            { french: "hôpital", english: "hospital" },
+            { french: "médecin", english: "doctor" },
+            { french: "infirmier", english: "nurse" },
+            { french: "pharmacie", english: "pharmacy" },
+            { french: "écouter", english: "to listen" },
+            { french: "parler", english: "to speak" },
+            { french: "lire", english: "to read" },
+            { french: "écrire", english: "to write" },
+            { french: "comprendre", english: "to understand" },
+            { french: "apprendre", english: "to learn" },
+            { french: "enseigner", english: "to teach" },
+            { french: "étudier", english: "to study" },
+            { french: "jouer", english: "to play" },
+            { french: "courir", english: "to run" },
+            { french: "marcher", english: "to walk" },
+            { french: "nager", english: "to swim" },
+            { french: "dormir", english: "to sleep" },
+            { french: "réveiller", english: "to wake up" },
+            { french: "acheter", english: "to buy" },
+            { french: "vendre", english: "to sell" },
+            { french: "payer", english: "to pay" },
+            { french: "cuisine", english: "kitchen" },
+            { french: "chambre", english: "bedroom" },
+            { french: "salle de bain", english: "bathroom" },
+            { french: "salon", english: "living room" },
+            { french: "table", english: "table" },
+            { french: "chaise", english: "chair" },
+            { french: "lit", english: "bed" },
+            { french: "fenêtre", english: "window" },
+            { french: "porte", english: "door" },
+            { french: "mur", english: "wall" },
+            { french: "plafond", english: "ceiling" },
+            { french: "sol", english: "floor" },
+            { french: "télévision", english: "television" },
+            { french: "téléphone", english: "phone" },
+            { french: "ordinateur", english: "computer" },
+            { french: "internet", english: "internet" },
+            { french: "musique", english: "music" },
+            { french: "film", english: "movie" },
+            { french: "livre", english: "book" },
+            { french: "journal", english: "newspaper" },
+            { french: "lettre", english: "letter" },
+            { french: "stylo", english: "pen" },
+            { french: "crayon", english: "pencil" },
+            { french: "papier", english: "paper" },
+            { french: "sac", english: "bag" },
+            { french: "vêtements", english: "clothes" },
+            { french: "chemise", english: "shirt" },
+            { french: "pantalon", english: "pants" },
+            { french: "chaussures", english: "shoes" },
+            { french: "chapeau", english: "hat" },
+            { french: "manteau", english: "coat" },
+            { french: "pluie", english: "rain" },
+            { french: "neige", english: "snow" },
+            { french: "vent", english: "wind" },
+            { french: "nuage", english: "cloud" },
+            { french: "beau", english: "beautiful" },
+            { french: "grand", english: "big" },
+            { french: "petit", english: "small" },
+            { french: "jeune", english: "young" },
+            { french: "vieux", english: "old" },
+            { french: "heureux", english: "happy" },
+            { french: "triste", english: "sad" },
+            { french: "fatigué", english: "tired" },
+            { french: "malade", english: "sick" },
+            { french: "content", english: "pleased" },
+            { french: "fâché", english: "angry" },
+            { french: "chaud", english: "hot" },
+            { french: "froid", english: "cold" },
+            { french: "propre", english: "clean" },
+            { french: "sale", english: "dirty" },
+            { french: "facile", english: "easy" },
+            { french: "difficile", english: "difficult" },
+            { french: "cher", english: "expensive" },
+            { french: "bon marché", english: "cheap" },
+            { french: "maintenant", english: "now" },
+            { french: "hier", english: "yesterday" },
+            { french: "demain", english: "tomorrow" },
+            { french: "matin", english: "morning" },
+            { french: "après-midi", english: "afternoon" },
+            { french: "soir", english: "evening" },
+            { french: "semaine", english: "week" },
+            { french: "mois", english: "month" },
+            { french: "année", english: "year" },
+            { french: "lundi", english: "Monday" },
+            { french: "mardi", english: "Tuesday" },
+            { french: "mercredi", english: "Wednesday" },
+            { french: "jeudi", english: "Thursday" },
+            { french: "vendredi", english: "Friday" },
+            { french: "samedi", english: "Saturday" },
+            { french: "dimanche", english: "Sunday" },
+            { french: "printemps", english: "spring" },
+            { french: "été", english: "summer" },
+            { french: "automne", english: "autumn" },
+            { french: "hiver", english: "winter" },
+            { french: "père", english: "father" },
+            { french: "mère", english: "mother" },
+            { french: "frère", english: "brother" },
+            { french: "sœur", english: "sister" },
+            { french: "enfant", english: "child" },
+            { french: "bébé", english: "baby" },
+            { french: "homme", english: "man" },
+            { french: "femme", english: "woman" },
+            { french: "profession", english: "profession" },
+            { french: "étudiant", english: "student" },
+            { french: "professeur", english: "teacher" },
+            { french: "avocat", english: "lawyer" },
+            { french: "ingénieur", english: "engineer" },
+            { french: "cuisinier", english: "cook" },
+            { french: "serveur", english: "waiter" },
+            { french: "argent", english: "money" },
+            { french: "banque", english: "bank" },
+            { french: "carte", english: "card" },
+            { french: "billet", english: "ticket" },
+            { french: "train", english: "train" },
+            { french: "avion", english: "airplane" },
+            { french: "bus", english: "bus" },
+            { french: "vélo", english: "bicycle" },
+            { french: "gare", english: "station" },
+            { french: "aéroport", english: "airport" },
+            { french: "voyage", english: "travel" },
+            { french: "vacances", english: "vacation" },
+            { french: "plage", english: "beach" },
+            { french: "forêt", english: "forest" },
+            { french: "campagne", english: "countryside" },
+            { french: "photo", english: "photo" },
+            { french: "appareil photo", english: "camera" },
+            { french: "musée", english: "museum" },
+            { french: "théâtre", english: "theater" },
+            { french: "cinéma", english: "cinema" },
+            { french: "parc", english: "park" },
+            { french: "zoo", english: "zoo" },
+            { french: "animal", english: "animal" },
+            { french: "chat", english: "cat" },
+            { french: "chien", english: "dog" },
+            { french: "oiseau", english: "bird" },
+            { french: "poisson", english: "fish" },
+            { french: "couleur", english: "color" },
+            { french: "rouge", english: "red" },
+            { french: "bleu", english: "blue" },
+            { french: "vert", english: "green" },
+            { french: "jaune", english: "yellow" },
+            { french: "blanc", english: "white" },
+            { french: "noir", english: "black" },
+            { french: "nombre", english: "number" },
+            { french: "un", english: "one" },
+            { french: "deux", english: "two" },
+            { french: "trois", english: "three" }
+        ];
+
+        let currentCardIndex = 0;
+        let showingFrench = true;
+
+        // Initialize the first card
+        updateCard();
+
+        function updateCard() {
+            const cardContent = document.getElementById('cardContent');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            // Show French or English based on state
+            cardContent.textContent = showingFrench
+                ? vocabulary[currentCardIndex].french
+                : vocabulary[currentCardIndex].english;
+
+            // Update button states
+            prevBtn.disabled = currentCardIndex === 0;
+            nextBtn.disabled = currentCardIndex === vocabulary.length - 1;
+        }
+
+        function flipCard() {
+            showingFrench = !showingFrench;
+            updateCard();
+        }
+
+        function nextCard() {
+            if (currentCardIndex < vocabulary.length - 1) {
+                currentCardIndex++;
+                showingFrench = true;
+                updateCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                showingFrench = true;
+                updateCard();
+            }
+        }
+
+        function playPronunciation() {
+            const utterance = new SpeechSynthesisUtterance(vocabulary[currentCardIndex].french);
+            utterance.lang = 'fr-FR'; // Set language to French
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
