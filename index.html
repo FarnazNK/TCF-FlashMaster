@@ -1,273 +1,680 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TCF Vocabulary Flashcards</title>
+    <title>TCF French Exam Preparation</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-2xl font-bold text-center mb-4">TCF Vocabulary Flashcards</h1>
-        <div id="flashcard" class="bg-blue-100 p-6 rounded-lg text-center text-xl font-semibold h-40 flex items-center justify-center cursor-pointer" onclick="flipCard()">
-            <span id="cardContent">Click to start</span>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-6 px-4">
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">TCF French Exam Preparation</h1>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-6">
+            <nav class="flex bg-white rounded-lg shadow-md overflow-hidden">
+                <button class="px-4 py-3 font-medium focus:outline-none tab-active" data-tab="flashcards">
+                    <i class="fas fa-cards mr-2"></i>Flashcards
+                </button>
+                <button class="px-4 py-3 font-medium focus:outline-none" data-tab="reading">
+                    <i class="fas fa-book-open mr-2"></i>Reading
+                </button>
+                <button class="px-4 py-3 font-medium focus:outline-none" data-tab="progress">
+                    <i class="fas fa-chart-line mr-2"></i>Progress
+                </button>
+            </nav>
         </div>
-        <div class="flex justify-between mt-4">
-            <button id="prevBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" onclick="prevCard()" disabled>Previous</button>
-            <button id="pronounceBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="playPronunciation()">Play Pronunciation</button>
-            <button id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="nextCard()">Next</button>
+        
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="tab-content">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mb-6">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
+                        <select id="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="all">All Words</option>
+                            <option value="basic">Basic Vocabulary</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="daily">Daily Life</option>
+                            <option value="travel">Travel & Tourism</option>
+                            <option value="work">Work & Education</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Progress</p>
+                        <div class="w-32 bg-gray-200 rounded-full h-4">
+                            <div id="progress-bar" class="bg-green-600 h-4 rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="flashcard" class="bg-blue-100 p-6 rounded-lg text-center text-xl font-semibold h-40 flex items-center justify-center cursor-pointer mb-4" onclick="flipCard()">
+                    <span id="cardContent">Click to start</span>
+                </div>
+                
+                <div class="flex justify-between mb-4">
+                    <button id="prevBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 disabled:opacity-50" onclick="prevCard()" disabled>
+                        <i class="fas fa-arrow-left mr-2"></i>Previous
+                    </button>
+                    <button id="pronounceBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-volume-up mr-2"></i>Pronounce
+                    </button>
+                    <button id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-arrow-right mr-2"></i>Next
+                    </button>
+                </div>
+                
+                <div class="flex justify-center">
+                    <button id="markKnownBtn" class="bg-green-100 text-green-700 px-4 py-2 rounded hover:bg-green-200 mr-2">
+                        <i class="fas fa-check mr-2"></i>I Know This
+                    </button>
+                    <button id="markUnknownBtn" class="bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200">
+                        <i class="fas fa-times mr-2"></i>Review Later
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+                <h2 class="text-xl font-bold mb-4">Search Vocabulary</h2>
+                <div class="flex mb-4">
+                    <input type="text" id="searchInput" placeholder="Search for words..." class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <button id="searchBtn" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div id="searchResults" class="mt-4 max-h-60 overflow-y-auto"></div>
+            </div>
+        </div>
+        
+        <!-- Reading Section -->
+        <div id="reading" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto mb-6">
+                <h2 class="text-2xl font-bold mb-4">Reading Practice</h2>
+                
+                <div class="mb-4">
+                    <label for="readingLevel" class="block text-sm font-medium text-gray-700">Difficulty Level:</label>
+                    <select id="readingLevel" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="beginner">A1 - Beginner</option>
+                        <option value="elementary">A2 - Elementary</option>
+                        <option value="intermediate">B1 - Intermediate</option>
+                        <option value="upperIntermediate">B2 - Upper Intermediate</option>
+                    </select>
+                </div>
+                
+                <div id="readingContent" class="mb-6 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Une journée à Paris</h3>
+                    <p class="mb-4 text-lg leading-relaxed">
+                        Aujourd'hui, je me promène dans les rues de Paris. Il fait beau et le soleil brille. Je visite le musée du Louvre et j'admire la Joconde. Après, je mange un sandwich au café près de la Seine. L'après-midi, je monte à la tour Eiffel pour voir toute la ville. Paris est vraiment une belle ville!
+                    </p>
+                    
+                    <div class="flex justify-between mb-4">
+                        <button id="readAloudBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <i class="fas fa-volume-up mr-2"></i>Read Aloud
+                        </button>
+                        <button id="pauseReadingBtn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                            <i class="fas fa-pause mr-2"></i>Pause
+                        </button>
+                        <button id="stopReadingBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                            <i class="fas fa-stop mr-2"></i>Stop
+                        </button>
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <h4 class="font-semibold mb-2">Vocabulary Help:</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><span class="font-medium">se promener</span> - to walk around</li>
+                            <li><span class="font-medium">il fait beau</span> - the weather is nice</li>
+                            <li><span class="font-medium">admirer</span> - to admire</li>
+                            <li><span class="font-medium">après</span> - after</li>
+                            <li><span class="font-medium">monter</span> - to climb up</li>
+                            <li><span class="font-medium">voir</span> - to see</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h3 class="text-xl font-semibold mb-3">Comprehension Questions</h3>
+                    <form id="readingQuiz">
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">1. Où se trouve le narrateur?</p>
+                            <div class="space-y-2">
+                                <div>
+                                    <input type="radio" id="q1a" name="q1" value="a" class="mr-2">
+                                    <label for="q1a">À Lyon</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q1b" name="q1" value="b" class="mr-2">
+                                    <label for="q1b">À Paris</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q1c" name="q1" value="c" class="mr-2">
+                                    <label for="q1c">À Marseille</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">2. Quel temps fait-il?</p>
+                            <div class="space-y-2">
+                                <div>
+                                    <input type="radio" id="q2a" name="q2" value="a" class="mr-2">
+                                    <label for="q2a">Il pleut</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q2b" name="q2" value="b" class="mr-2">
+                                    <label for="q2b">Il fait beau</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q2c" name="q2" value="c" class="mr-2">
+                                    <label for="q2c">Il neige</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">3. Qu'est-ce que le narrateur visite?</p>
+                            <div class="space-y-2">
+                                <div>
+                                    <input type="radio" id="q3a" name="q3" value="a" class="mr-2">
+                                    <label for="q3a">Le musée du Louvre</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q3b" name="q3" value="b" class="mr-2">
+                                    <label for="q3b">La tour Eiffel</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="q3c" name="q3" value="c" class="mr-2">
+                                    <label for="q3c">Les deux</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="checkAnswersBtn" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 w-full">
+                            Check Answers
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">Select Reading Passage</h2>
+                <ul class="divide-y divide-gray-200">
+                    <li class="py-4 cursor-pointer hover:bg-gray-50 px-3 rounded">
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded mr-2">A1</span>
+                        Une journée à Paris
+                    </li>
+                    <li class="py-4 cursor-pointer hover:bg-gray-50 px-3 rounded">
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded mr-2">A2</span>
+                        Ma routine quotidienne
+                    </li>
+                    <li class="py-4 cursor-pointer hover:bg-gray-50 px-3 rounded">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded mr-2">B1</span>
+                        Les vacances idéales
+                    </li>
+                    <li class="py-4 cursor-pointer hover:bg-gray-50 px-3 rounded">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded mr-2">B2</span>
+                        L'environnement et le changement climatique
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Progress Section -->
+        <div id="progress" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6">Your Learning Progress</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-2">Vocabulary Progress</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="w-full bg-gray-200 rounded-full h-5 mr-2">
+                                <div class="bg-blue-600 h-5 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <span class="text-sm font-medium">65%</span>
+                        </div>
+                        <p class="text-sm text-gray-600">130/200 words mastered</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-2">Reading Progress</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="w-full bg-gray-200 rounded-full h-5 mr-2">
+                                <div class="bg-green-600 h-5 rounded-full" style="width: 40%"></div>
+                            </div>
+                            <span class="text-sm font-medium">40%</span>
+                        </div>
+                        <p class="text-sm text-gray-600">4/10 texts completed</p>
+                    </div>
+                </div>
+                
+                <h3 class="font-semibold text-lg mb-3">Recently Studied Words</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">French</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">English</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">bonjour</td>
+                                <td class="px-6 py-4 whitespace-nowrap">hello</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Mastered</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">maison</td>
+                                <td class="px-6 py-4 whitespace-nowrap">house</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Mastered</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">comprendre</td>
+                                <td class="px-6 py-4 whitespace-nowrap">to understand</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Learning</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">médecin</td>
+                                <td class="px-6 py-4 whitespace-nowrap">doctor</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Review</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // TCF vocabulary list (French word: English translation, 200 words)
+        // TCF vocabulary list with categories
         const vocabulary = [
-            { french: "bonjour", english: "hello" },
-            { french: "merci", english: "thank you" },
-            { french: "s'il vous plaît", english: "please" },
-            { french: "au revoir", english: "goodbye" },
-            { french: "livre", english: "book" },
-            { french: "maison", english: "house" },
-            { french: "école", english: "school" },
-            { french: "ami", english: "friend" },
-            { french: "travailler", english: "to work" },
-            { french: "manger", english: "to eat" },
-            { french: "voiture", english: "car" },
-            { french: "famille", english: "family" },
-            { french: "temps", english: "time" },
-            { french: "jour", english: "day" },
-            { french: "nuit", english: "night" },
-            { french: "eau", english: "water" },
-            { french: "pain", english: "bread" },
-            { french: "fromage", english: "cheese" },
-            { french: "vin", english: "wine" },
-            { french: "café", english: "coffee" },
-            { french: "thé", english: "tea" },
-            { french: "jardin", english: "garden" },
-            { french: "fleur", english: "flower" },
-            { french: "arbre", english: "tree" },
-            { french: "ciel", english: "sky" },
-            { french: "soleil", english: "sun" },
-            { french: "lune", english: "moon" },
-            { french: "étoile", english: "star" },
-            { french: "mer", english: "sea" },
-            { french: "montagne", english: "mountain" },
-            { french: "rivière", english: "river" },
-            { french: "ville", english: "city" },
-            { french: "village", english: "village" },
-            { french: "rue", english: "street" },
-            { french: "pont", english: "bridge" },
-            { french: "magasin", english: "shop" },
-            { french: "marché", english: "market" },
-            { french: "boulangerie", english: "bakery" },
-            { french: "hôpital", english: "hospital" },
-            { french: "médecin", english: "doctor" },
-            { french: "infirmier", english: "nurse" },
-            { french: "pharmacie", english: "pharmacy" },
-            { french: "écouter", english: "to listen" },
-            { french: "parler", english: "to speak" },
-            { french: "lire", english: "to read" },
-            { french: "écrire", english: "to write" },
-            { french: "comprendre", english: "to understand" },
-            { french: "apprendre", english: "to learn" },
-            { french: "enseigner", english: "to teach" },
-            { french: "étudier", english: "to study" },
-            { french: "jouer", english: "to play" },
-            { french: "courir", english: "to run" },
-            { french: "marcher", english: "to walk" },
-            { french: "nager", english: "to swim" },
-            { french: "dormir", english: "to sleep" },
-            { french: "réveiller", english: "to wake up" },
-            { french: "acheter", english: "to buy" },
-            { french: "vendre", english: "to sell" },
-            { french: "payer", english: "to pay" },
-            { french: "cuisine", english: "kitchen" },
-            { french: "chambre", english: "bedroom" },
-            { french: "salle de bain", english: "bathroom" },
-            { french: "salon", english: "living room" },
-            { french: "table", english: "table" },
-            { french: "chaise", english: "chair" },
-            { french: "lit", english: "bed" },
-            { french: "fenêtre", english: "window" },
-            { french: "porte", english: "door" },
-            { french: "mur", english: "wall" },
-            { french: "plafond", english: "ceiling" },
-            { french: "sol", english: "floor" },
-            { french: "télévision", english: "television" },
-            { french: "téléphone", english: "phone" },
-            { french: "ordinateur", english: "computer" },
-            { french: "internet", english: "internet" },
-            { french: "musique", english: "music" },
-            { french: "film", english: "movie" },
-            { french: "livre", english: "book" },
-            { french: "journal", english: "newspaper" },
-            { french: "lettre", english: "letter" },
-            { french: "stylo", english: "pen" },
-            { french: "crayon", english: "pencil" },
-            { french: "papier", english: "paper" },
-            { french: "sac", english: "bag" },
-            { french: "vêtements", english: "clothes" },
-            { french: "chemise", english: "shirt" },
-            { french: "pantalon", english: "pants" },
-            { french: "chaussures", english: "shoes" },
-            { french: "chapeau", english: "hat" },
-            { french: "manteau", english: "coat" },
-            { french: "pluie", english: "rain" },
-            { french: "neige", english: "snow" },
-            { french: "vent", english: "wind" },
-            { french: "nuage", english: "cloud" },
-            { french: "beau", english: "beautiful" },
-            { french: "grand", english: "big" },
-            { french: "petit", english: "small" },
-            { french: "jeune", english: "young" },
-            { french: "vieux", english: "old" },
-            { french: "heureux", english: "happy" },
-            { french: "triste", english: "sad" },
-            { french: "fatigué", english: "tired" },
-            { french: "malade", english: "sick" },
-            { french: "content", english: "pleased" },
-            { french: "fâché", english: "angry" },
-            { french: "chaud", english: "hot" },
-            { french: "froid", english: "cold" },
-            { french: "propre", english: "clean" },
-            { french: "sale", english: "dirty" },
-            { french: "facile", english: "easy" },
-            { french: "difficile", english: "difficult" },
-            { french: "cher", english: "expensive" },
-            { french: "bon marché", english: "cheap" },
-            { french: "maintenant", english: "now" },
-            { french: "hier", english: "yesterday" },
-            { french: "demain", english: "tomorrow" },
-            { french: "matin", english: "morning" },
-            { french: "après-midi", english: "afternoon" },
-            { french: "soir", english: "evening" },
-            { french: "semaine", english: "week" },
-            { french: "mois", english: "month" },
-            { french: "année", english: "year" },
-            { french: "lundi", english: "Monday" },
-            { french: "mardi", english: "Tuesday" },
-            { french: "mercredi", english: "Wednesday" },
-            { french: "jeudi", english: "Thursday" },
-            { french: "vendredi", english: "Friday" },
-            { french: "samedi", english: "Saturday" },
-            { french: "dimanche", english: "Sunday" },
-            { french: "printemps", english: "spring" },
-            { french: "été", english: "summer" },
-            { french: "automne", english: "autumn" },
-            { french: "hiver", english: "winter" },
-            { french: "père", english: "father" },
-            { french: "mère", english: "mother" },
-            { french: "frère", english: "brother" },
-            { french: "sœur", english: "sister" },
-            { french: "enfant", english: "child" },
-            { french: "bébé", english: "baby" },
-            { french: "homme", english: "man" },
-            { french: "femme", english: "woman" },
-            { french: "profession", english: "profession" },
-            { french: "étudiant", english: "student" },
-            { french: "professeur", english: "teacher" },
-            { french: "avocat", english: "lawyer" },
-            { french: "ingénieur", english: "engineer" },
-            { french: "cuisinier", english: "cook" },
-            { french: "serveur", english: "waiter" },
-            { french: "argent", english: "money" },
-            { french: "banque", english: "bank" },
-            { french: "carte", english: "card" },
-            { french: "billet", english: "ticket" },
-            { french: "train", english: "train" },
-            { french: "avion", english: "airplane" },
-            { french: "bus", english: "bus" },
-            { french: "vélo", english: "bicycle" },
-            { french: "gare", english: "station" },
-            { french: "aéroport", english: "airport" },
-            { french: "voyage", english: "travel" },
-            { french: "vacances", english: "vacation" },
-            { french: "plage", english: "beach" },
-            { french: "forêt", english: "forest" },
-            { french: "campagne", english: "countryside" },
-            { french: "photo", english: "photo" },
-            { french: "appareil photo", english: "camera" },
-            { french: "musée", english: "museum" },
-            { french: "théâtre", english: "theater" },
-            { french: "cinéma", english: "cinema" },
-            { french: "parc", english: "park" },
-            { french: "zoo", english: "zoo" },
-            { french: "animal", english: "animal" },
-            { french: "chat", english: "cat" },
-            { french: "chien", english: "dog" },
-            { french: "oiseau", english: "bird" },
-            { french: "poisson", english: "fish" },
-            { french: "couleur", english: "color" },
-            { french: "rouge", english: "red" },
-            { french: "bleu", english: "blue" },
-            { french: "vert", english: "green" },
-            { french: "jaune", english: "yellow" },
-            { french: "blanc", english: "white" },
-            { french: "noir", english: "black" },
-            { french: "nombre", english: "number" },
-            { french: "un", english: "one" },
-            { french: "deux", english: "two" },
-            { french: "trois", english: "three" }
+            // Basic vocabulary
+            { french: "bonjour", english: "hello", category: "basic" },
+            { french: "merci", english: "thank you", category: "basic" },
+            { french: "s'il vous plaît", english: "please", category: "basic" },
+            { french: "au revoir", english: "goodbye", category: "basic" },
+            { french: "oui", english: "yes", category: "basic" },
+            { french: "non", english: "no", category: "basic" },
+            
+            // Daily life
+            { french: "maison", english: "house", category: "daily" },
+            { french: "famille", english: "family", category: "daily" },
+            { french: "cuisine", english: "kitchen", category: "daily" },
+            { french: "chambre", english: "bedroom", category: "daily" },
+            { french: "salle de bain", english: "bathroom", category: "daily" },
+            { french: "salon", english: "living room", category: "daily" },
+            { french: "table", english: "table", category: "daily" },
+            { french: "chaise", english: "chair", category: "daily" },
+            { french: "lit", english: "bed", category: "daily" },
+            { french: "fenêtre", english: "window", category: "daily" },
+            { french: "porte", english: "door", category: "daily" },
+            { french: "mur", english: "wall", category: "daily" },
+            { french: "plafond", english: "ceiling", category: "daily" },
+            { french: "sol", english: "floor", category: "daily" },
+            
+            // Food
+            { french: "manger", english: "to eat", category: "daily" },
+            { french: "boire", english: "to drink", category: "daily" },
+            { french: "eau", english: "water", category: "daily" },
+            { french: "pain", english: "bread", category: "daily" },
+            { french: "fromage", english: "cheese", category: "daily" },
+            { french: "vin", english: "wine", category: "daily" },
+            { french: "café", english: "coffee", category: "daily" },
+            { french: "thé", english: "tea", category: "daily" },
+            
+            // Nature
+            { french: "jardin", english: "garden", category: "daily" },
+            { french: "fleur", english: "flower", category: "daily" },
+            { french: "arbre", english: "tree", category: "daily" },
+            { french: "ciel", english: "sky", category: "daily" },
+            { french: "soleil", english: "sun", category: "daily" },
+            { french: "lune", english: "moon", category: "daily" },
+            { french: "étoile", english: "star", category: "daily" },
+            { french: "mer", english: "sea", category: "daily" },
+            { french: "montagne", english: "mountain", category: "daily" },
+            { french: "rivière", english: "river", category: "daily" },
+            
+            // City
+            { french: "ville", english: "city", category: "travel" },
+            { french: "village", english: "village", category: "travel" },
+            { french: "rue", english: "street", category: "travel" },
+            { french: "pont", english: "bridge", category: "travel" },
+            { french: "magasin", english: "shop", category: "travel" },
+            { french: "marché", english: "market", category: "travel" },
+            { french: "boulangerie", english: "bakery", category: "travel" },
+            { french: "hôpital", english: "hospital", category: "travel" },
+            
+            // Professions
+            { french: "médecin", english: "doctor", category: "work" },
+            { french: "infirmier", english: "nurse", category: "work" },
+            { french: "pharmacie", english: "pharmacy", category: "work" },
+            { french: "professeur", english: "teacher", category: "work" },
+            { french: "étudiant", english: "student", category: "work" },
+            { french: "avocat", english: "lawyer", category: "work" },
+            { french: "ingénieur", english: "engineer", category: "work" },
+            { french: "cuisinier", english: "cook", category: "work" },
+            { french: "serveur", english: "waiter", category: "work" },
+            
+            // Verbs
+            { french: "écouter", english: "to listen", category: "intermediate" },
+            { french: "parler", english: "to speak", category: "intermediate" },
+            { french: "lire", english: "to read", category: "intermediate" },
+            { french: "écrire", english: "to write", category: "intermediate" },
+            { french: "comprendre", english: "to understand", category: "intermediate" },
+            { french: "apprendre", english: "to learn", category: "intermediate" },
+            { french: "enseigner", english: "to teach", category: "work" },
+            { french: "étudier", english: "to study", category: "work" },
+            { french: "jouer", english: "to play", category: "intermediate" },
+            { french: "courir", english: "to run", category: "intermediate" },
+            { french: "marcher", english: "to walk", category: "intermediate" },
+            { french: "nager", english: "to swim", category: "intermediate" },
+            { french: "dormir", english: "to sleep", category: "intermediate" },
+            { french: "réveiller", english: "to wake up", category: "intermediate" },
+            { french: "acheter", english: "to buy", category: "intermediate" },
+            { french: "vendre", english: "to sell", category: "intermediate" },
+            { french: "payer", english: "to pay", category: "intermediate" },
+            
+            // Technology
+            { french: "télévision", english: "television", category: "daily" },
+            { french: "téléphone", english: "phone", category: "daily" },
+            { french: "ordinateur", english: "computer", category: "daily" },
+            { french: "internet", english: "internet", category: "daily" },
+            
+            // Arts
+            { french: "musique", english: "music", category: "intermediate" },
+            { french: "film", english: "movie", category: "intermediate" },
+            { french: "livre", english: "book", category: "intermediate" },
+            { french: "journal", english: "newspaper", category: "intermediate" },
+            
+            // Office
+            { french: "lettre", english: "letter", category: "work" },
+            { french: "stylo", english: "pen", category: "work" },
+            { french: "crayon", english: "pencil", category: "work" },
+            { french: "papier", english: "paper", category: "work" },
+            { french: "sac", english: "bag", category: "daily" },
+            
+            // Clothing
+            { french: "vêtements", english: "clothes", category: "daily" },
+            { french: "chemise", english: "shirt", category: "daily" },
+            { french: "pantalon", english: "pants", category: "daily" },
+            { french: "chaussures", english: "shoes", category: "daily" },
+            { french: "chapeau", english: "hat", category: "daily" },
+            { french: "manteau", english: "coat", category: "daily" },
+            
+            // Weather
+            { french: "pluie", english: "rain", category: "intermediate" },
+            { french: "neige", english: "snow", category: "intermediate" },
+            { french: "vent", english: "wind", category: "intermediate" },
+            { french: "nuage", english: "cloud", category: "intermediate" },
+            
+            // Adjectives
+            { french: "beau", english: "beautiful", category: "intermediate" },
+            { french: "grand", english: "big", category: "intermediate" },
+            { french: "petit", english: "small", category: "intermediate" },
+            { french: "jeune", english: "young", category: "intermediate" },
+            { french: "vieux", english: "old", category: "intermediate" },
+            { french: "heureux", english: "happy", category: "intermediate" },
+            { french: "triste", english: "sad", category: "intermediate" },
+            { french: "fatigué", english: "tired", category: "intermediate" },
+            { french: "malade", english: "sick", category: "intermediate" },
+            { french: "content", english: "pleased", category: "intermediate" },
+            { french: "fâché", english: "angry", category: "intermediate" },
+            { french: "chaud", english: "hot", category: "intermediate" },
+            { french: "froid", english: "cold", category: "intermediate" },
+            { french: "propre", english: "clean", category: "intermediate" },
+            { french: "sale", english: "dirty", category: "intermediate" },
+            { french: "facile", english: "easy", category: "intermediate" },
+            { french: "difficile", english: "difficult", category: "intermediate" },
+            { french: "cher", english: "expensive", category: "intermediate" },
+            { french: "bon marché", english: "cheap", category: "intermediate" },
+            
+            // Time expressions
+            { french: "maintenant", english: "now", category: "intermediate" },
+            { french: "hier", english: "yesterday", category: "intermediate" },
+            { french: "demain", english: "tomorrow", category: "intermediate" },
+            { french: "matin", english: "morning", category: "intermediate" },
+            { french: "après-midi", english: "afternoon", category: "intermediate" },
+            { french: "soir", english: "evening", category: "intermediate" },
+            { french: "semaine", english: "week", category: "intermediate" },
+            { french: "mois", english: "month", category: "intermediate" },
+            { french: "année", english: "year", category: "intermediate" },
+            
+            // Days of the week
+            { french: "lundi", english: "Monday", category: "basic" },
+            { french: "mardi", english: "Tuesday", category: "basic" },
+            { french: "mercredi", english: "Wednesday", category: "basic" },
+            { french: "jeudi", english: "Thursday", category: "basic" },
+            { french: "vendredi", english: "Friday", category: "basic" },
+            { french: "samedi", english: "Saturday", category: "basic" },
+            { french: "dimanche", english: "Sunday", category: "basic" },
+            
+            // Seasons
+            { french: "printemps", english: "spring", category: "intermediate" },
+            { french: "été", english: "summer", category: "intermediate" },
+            { french: "automne", english: "autumn", category: "intermediate" },
+            { french: "hiver", english: "winter", category: "intermediate" },
+            
+            // Family
+            { french: "père", english: "father", category: "basic" },
+            { french: "mère", english: "mother", category: "basic" },
+            { french: "frère", english: "brother", category: "basic" },
+            { french: "sœur", english: "sister", category: "basic" },
+            { french: "enfant", english: "child", category: "basic" },
+            { french: "bébé", english: "baby", category: "basic" },
+            { french: "homme", english: "man", category: "basic" },
+            { french: "femme", english: "woman", category: "basic" },
+            
+            // Transport
+            { french: "argent", english: "money", category: "travel" },
+            { french: "banque", english: "bank", category: "travel" },
+            { french: "carte", english: "card", category: "travel" },
+            { french: "billet", english: "ticket", category: "travel" },
+            { french: "train", english: "train", category: "travel" },
+            { french: "avion", english: "airplane", category: "travel" },
+            { french: "bus", english: "bus", category: "travel" },
+            { french: "vélo", english: "bicycle", category: "travel" },
+            { french: "gare", english: "station", category: "travel" },
+            { french: "aéroport", english: "airport", category: "travel" },
+            { french: "voyage", english: "travel", category: "travel" },
+            { french: "vacances", english: "vacation", category: "travel" },
+            
+            // Places
+            { french: "plage", english: "beach", category: "travel" },
+            { french: "forêt", english: "forest", category: "travel" },
+            { french: "campagne", english: "countryside", category: "travel" },
+            { french: "photo", english: "photo", category: "intermediate" },
+            { french: "appareil photo", english: "camera", category: "intermediate" },
+            { french: "musée", english: "museum", category: "travel" },
+            { french: "théâtre", english: "theater", category: "travel" },
+            { french: "cinéma", english: "cinema", category: "travel" },
+            { french: "parc", english: "park", category: "travel" },
+            { french: "zoo", english: "zoo", category: "travel" },
+            
+            // Animals
+            { french: "animal", english: "animal", category: "intermediate" },
+            { french: "chat", english: "cat", category: "intermediate" },
+            { french: "chien", english: "dog", category: "intermediate" },
+            { french: "oiseau", english: "bird", category: "intermediate" },
+            { french: "poisson", english: "fish", category: "intermediate" },
+            
+            // Colors
+            { french: "couleur", english: "color", category: "basic" },
+            { french: "rouge", english: "red", category: "basic" },
+            { french: "bleu", english: "blue", category: "basic" },
+            { french: "vert", english: "green", category: "basic" },
+            { french: "jaune", english: "yellow", category: "basic" },
+            { french: "blanc", english: "white", category: "basic" },
+            { french: "noir", english: "black", category: "basic" },
+            
+            // Numbers
+            { french: "nombre", english: "number", category: "basic" },
+            { french: "un", english: "one", category: "basic" },
+            { french: "deux", english: "two", category: "basic" },
+            { french: "trois", english: "three", category: "basic" },
+            
+            // Advanced vocabulary
+            { french: "environnement", english: "environment", category: "advanced" },
+            { french: "développement", english: "development", category: "advanced" },
+            { french: "gouvernement", english: "government", category: "advanced" },
+            { french: "économie", english: "economy", category: "advanced" },
+            { french: "politique", english: "politics", category: "advanced" },
+            { french: "culture", english: "culture", category: "advanced" },
+            { french: "société", english: "society", category: "advanced" },
+            { french: "technologie", english: "technology", category: "advanced" },
+            { french: "recherche", english: "research", category: "advanced" },
+            { french: "éducation", english: "education", category: "advanced" }
         ];
 
+        // Reading passages
+        const readingPassages = [
+            {
+                level: "beginner",
+                title: "Une journée à Paris",
+                text: "Aujourd'hui, je me promène dans les rues de Paris. Il fait beau et le soleil brille. Je visite le musée du Louvre et j'admire la Joconde. Après, je mange un sandwich au café près de la Seine. L'après-midi, je monte à la tour Eiffel pour voir toute la ville. Paris est vraiment une belle ville!",
+                vocabulary: [
+                    { word: "se promener", definition: "to walk around" },
+                    { word: "il fait beau", definition: "the weather is nice" },
+                    { word: "admirer", definition: "to admire" },
+                    { word: "après", definition: "after" },
+                    { word: "monter", definition: "to climb up" },
+                    { word: "voir", definition: "to see" }
+                ],
+                questions: [
+                    { 
+                        question: "Où se trouve le narrateur?", 
+                        options: ["À Lyon", "À Paris", "À Marseille"],
+                        correct: 1
+                    },
+                    { 
+                        question: "Quel temps fait-il?",
+                        options: ["Il pleut", "Il fait beau", "Il neige"],
+                        correct: 1
+                    },
+                    { 
+                        question: "Qu'est-ce que le narrateur visite?",
+                        options: ["Le musée du Louvre", "La tour Eiffel", "Les deux"],
+                        correct: 2
+                    }
+                ]
+            },
+            {
+                level: "elementary",
+                title: "Ma routine quotidienne",
+                text: "Je me réveille à sept heures du matin. Je prends une douche et je m'habille. Après le petit-déjeuner, je vais au travail en bus. Je travaille de neuf heures à dix-sept heures. Le soir, je dîne avec ma famille et nous regardons la télévision. Je me couche à vingt-trois heures.",
+                vocabulary: [
+                    { word: "se réveiller", definition: "to wake up" },
+                    { word: "prendre une douche", definition: "to take a shower" },
+                    { word: "s'habiller", definition: "to get dressed" },
+                    { word: "petit-déjeuner", definition: "breakfast" },
+                    { word: "se coucher", definition: "to go to bed" }
+                ],
+                questions: [
+                    { 
+                        question: "À quelle heure la personne se réveille-t-elle?", 
+                        options: ["À six heures", "À sept heures", "À huit heures"],
+                        correct: 1
+                    },
+                    { 
+                        question: "Comment va-t-elle au travail?",
+                        options: ["En voiture", "À pied", "En bus"],
+                        correct: 2
+                    },
+                    { 
+                        question: "Que fait-elle le soir?",
+                        options: ["Elle lit un livre", "Elle dîne avec sa famille", "Elle va au cinéma"],
+                        correct: 1
+                    }
+                ]
+            }
+        ];
+
+        // App state
         let currentCardIndex = 0;
         let showingFrench = true;
+        let filteredVocabulary = [...vocabulary];
+        let knownWords = [];
+        let unknownWords = [];
+        let currentSpeech = null;
 
-        // Initialize the first card
-        updateCard();
+        // DOM Elements
+        const tabs = document.querySelectorAll('[data-tab]');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const categorySelect = document.getElementById('category');
+        const flashcardElement = document.getElementById('flashcard');
+        const cardContent = document.getElementById('cardContent');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pronounceBtn = document.getElementById('pronounceBtn');
+        const markKnownBtn = document.getElementById('markKnownBtn');
+        const markUnknownBtn = document.getElementById('markUnknownBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
+        const progressBar = document.getElementById('progress-bar');
+        const readingLevelSelect = document.getElementById('readingLevel');
+        const readingContent = document.getElementById('readingContent');
+        const readAloudBtn = document.getElementById('readAloudBtn');
+        const pauseReadingBtn = document.getElementById('pauseReadingBtn');
+        const stopReadingBtn = document.getElementById('stopReadingBtn');
+        const checkAnswersBtn = document.getElementById('checkAnswersBtn');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTabs();
+            initializeFlashcards();
+            initializeSearch();
+            initializeReading();
+        });
+
+        // Tab functionality
+        function initializeTabs() {
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('bg-blue-100', 'text-blue-700', 'tab-active'));
+                    
+                    // Add active class to current tab
+                    tab.classList.add('bg-blue-100', 'text-blue-700', 'tab-active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Show current tab content
+                    document.getElementById(tab.dataset.tab).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Flashcard functionality
+        function initializeFlashcards() {
+            updateCard();
+            
+            // Event listeners
+            flashcardElement.addEventListener('click', flipCard);
+            prevBtn.addEventListener('click', prevCard);
+            nextBtn.addEventListener('click', nextCard);
+            pronounceBtn.addEventListener('click', playPronunciation);
+            markKnownBtn.addEventListener('click', markAsKnown);
+            markUnknownBtn.addEventListener('click', markAsUnknown);
+            
+            categorySelect.addEventListener('change', filterByCategory);
+        }
 
         function updateCard() {
-            const cardContent = document.getElementById('cardContent');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-
             // Show French or English based on state
             cardContent.textContent = showingFrench
-                ? vocabulary[currentCardIndex].french
-                : vocabulary[currentCardIndex].english;
+                ? filteredVocabulary[currentCardIndex].french
+                : filteredVocabulary[currentCardIndex].english;
 
             // Update button states
             prevBtn.disabled = currentCardIndex === 0;
-            nextBtn.disabled = currentCardIndex === vocabulary.length - 1;
+            nextBtn.disabled = currentCardIndex === filteredVocabulary.length - 1;
+            
+            // Update progress
+            updateProgress();
         }
 
         function flipCard() {
@@ -276,7 +683,7 @@
         }
 
         function nextCard() {
-            if (currentCardIndex < vocabulary.length - 1) {
+            if (currentCardIndex < filteredVocabulary.length - 1) {
                 currentCardIndex++;
                 showingFrench = true;
                 updateCard();
@@ -292,9 +699,310 @@
         }
 
         function playPronunciation() {
-            const utterance = new SpeechSynthesisUtterance(vocabulary[currentCardIndex].french);
+            if (currentSpeech) {
+                speechSynthesis.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(filteredVocabulary[currentCardIndex].french);
             utterance.lang = 'fr-FR'; // Set language to French
+            
+            // Set a slower rate for better comprehension
+            utterance.rate = 0.9;
+            
+            currentSpeech = utterance;
             speechSynthesis.speak(utterance);
+        }
+
+        function markAsKnown() {
+            const currentWord = filteredVocabulary[currentCardIndex];
+            if (!knownWords.includes(currentWord.french)) {
+                knownWords.push(currentWord.french);
+                
+                // Remove from unknown if it was there
+                const unknownIndex = unknownWords.indexOf(currentWord.french);
+                if (unknownIndex > -1) {
+                    unknownWords.splice(unknownIndex, 1);
+                }
+            }
+            
+            updateProgress();
+            nextCard();
+        }
+
+        function markAsUnknown() {
+            const currentWord = filteredVocabulary[currentCardIndex];
+            if (!unknownWords.includes(currentWord.french)) {
+                unknownWords.push(currentWord.french);
+                
+                // Remove from known if it was there
+                const knownIndex = knownWords.indexOf(currentWord.french);
+                if (knownIndex > -1) {
+                    knownWords.splice(knownIndex, 1);
+                }
+            }
+            
+            updateProgress();
+            nextCard();
+        }
+
+        function filterByCategory() {
+            const category = categorySelect.value;
+            
+            // Filter vocabulary based on selected category
+            if (category === 'all') {
+                filteredVocabulary = [...vocabulary];
+            } else {
+                filteredVocabulary = vocabulary.filter(word => word.category === category);
+            }
+            
+            // Reset index and update card
+            currentCardIndex = 0;
+            showingFrench = true;
+            updateCard();
+        }
+
+        function updateProgress() {
+            const totalWords = vocabulary.length;
+            const knownWordsCount = knownWords.length;
+            const progressPercentage = Math.round((knownWordsCount / totalWords) * 100);
+            
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // Search functionality
+        function initializeSearch() {
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                searchResults.innerHTML = '<p class="text-gray-500">Please enter a search term</p>';
+                return;
+            }
+            
+            // Search in both French and English
+            const results = vocabulary.filter(word => 
+                word.french.toLowerCase().includes(searchTerm) || 
+                word.english.toLowerCase().includes(searchTerm)
+            );
+            
+            displaySearchResults(results);
+        }
+
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p class="text-gray-500">No results found</p>';
+                return;
+            }
+            
+            const resultsList = document.createElement('ul');
+            resultsList.className = 'divide-y divide-gray-200';
+            
+            results.forEach(word => {
+                const listItem = document.createElement('li');
+                listItem.className = 'py-2 flex justify-between items-center';
+                
+                const wordInfo = document.createElement('div');
+                wordInfo.innerHTML = `<span class="font-medium">${word.french}</span> - ${word.english}`;
+                
+                const categoryBadge = document.createElement('span');
+                categoryBadge.className = 'text-xs font-medium px-2 py-1 rounded';
+                categoryBadge.textContent = word.category;
+                
+                // Set badge color based on category
+                switch(word.category) {
+                    case 'basic':
+                        categoryBadge.classList.add('bg-green-100', 'text-green-800');
+                        break;
+                    case 'intermediate':
+                        categoryBadge.classList.add('bg-blue-100', 'text-blue-800');
+                        break;
+                    case 'advanced':
+                        categoryBadge.classList.add('bg-purple-100', 'text-purple-800');
+                        break;
+                    case 'daily':
+                        categoryBadge.classList.add('bg-yellow-100', 'text-yellow-800');
+                        break;
+                    case 'travel':
+                        categoryBadge.classList.add('bg-orange-100', 'text-orange-800');
+                        break;
+                    case 'work':
+                        categoryBadge.classList.add('bg-red-100', 'text-red-800');
+                        break;
+                }
+                
+                listItem.appendChild(wordInfo);
+                listItem.appendChild(categoryBadge);
+                resultsList.appendChild(listItem);
+            });
+            
+            searchResults.appendChild(resultsList);
+        }
+
+        // Reading section functionality
+        function initializeReading() {
+            readAloudBtn.addEventListener('click', readAloud);
+            pauseReadingBtn.addEventListener('click', pauseReading);
+            stopReadingBtn.addEventListener('click', stopReading);
+            readingLevelSelect.addEventListener('change', changeReadingPassage);
+            checkAnswersBtn.addEventListener('click', checkAnswers);
+            
+            // Initialize with first reading passage
+            loadReadingPassage(readingPassages[0]);
+        }
+
+        function loadReadingPassage(passage) {
+            // Update content
+            const readingHTML = `
+                <h3 class="text-xl font-semibold mb-3">${passage.title}</h3>
+                <p class="mb-4 text-lg leading-relaxed">${passage.text}</p>
+                
+                <div class="flex justify-between mb-4">
+                    <button id="readAloudBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-volume-up mr-2"></i>Read Aloud
+                    </button>
+                    <button id="pauseReadingBtn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        <i class="fas fa-pause mr-2"></i>Pause
+                    </button>
+                    <button id="stopReadingBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                        <i class="fas fa-stop mr-2"></i>Stop
+                    </button>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h4 class="font-semibold mb-2">Vocabulary Help:</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        ${passage.vocabulary.map(item => 
+                            `<li><span class="font-medium">${item.word}</span> - ${item.definition}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            readingContent.innerHTML = readingHTML;
+            
+            // Update quiz questions
+            const quizForm = document.getElementById('readingQuiz');
+            let quizHTML = '';
+            
+            passage.questions.forEach((q, qIndex) => {
+                quizHTML += `
+                    <div class="mb-4">
+                        <p class="font-medium mb-2">${qIndex + 1}. ${q.question}</p>
+                        <div class="space-y-2">
+                            ${q.options.map((option, oIndex) => `
+                                <div>
+                                    <input type="radio" id="q${qIndex + 1}${String.fromCharCode(97 + oIndex)}" 
+                                           name="q${qIndex + 1}" value="${oIndex}" class="mr-2">
+                                    <label for="q${qIndex + 1}${String.fromCharCode(97 + oIndex)}">${option}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            quizHTML += `
+                <button type="button" id="checkAnswersBtn" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 w-full">
+                    Check Answers
+                </button>
+            `;
+            
+            quizForm.innerHTML = quizHTML;
+            
+            // Reattach event listener
+            document.getElementById('checkAnswersBtn').addEventListener('click', checkAnswers);
+            document.getElementById('readAloudBtn').addEventListener('click', readAloud);
+            document.getElementById('pauseReadingBtn').addEventListener('click', pauseReading);
+            document.getElementById('stopReadingBtn').addEventListener('click', stopReading);
+        }
+
+        function changeReadingPassage() {
+            const selectedLevel = readingLevelSelect.value;
+            const passage = readingPassages.find(p => p.level === selectedLevel) || readingPassages[0];
+            loadReadingPassage(passage);
+        }
+
+        function readAloud() {
+            const currentPassageLevel = readingLevelSelect.value;
+            const passage = readingPassages.find(p => p.level === currentPassageLevel) || readingPassages[0];
+            
+            if (currentSpeech) {
+                speechSynthesis.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(passage.text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.8; // Slower rate for better comprehension
+            
+            currentSpeech = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        function pauseReading() {
+            if (speechSynthesis.speaking) {
+                speechSynthesis.pause();
+            } else if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+            }
+        }
+
+        function stopReading() {
+            if (currentSpeech) {
+                speechSynthesis.cancel();
+                currentSpeech = null;
+            }
+        }
+
+        function checkAnswers() {
+            const currentPassageLevel = readingLevelSelect.value;
+            const passage = readingPassages.find(p => p.level === currentPassageLevel) || readingPassages[0];
+            let score = 0;
+            
+            passage.questions.forEach((q, qIndex) => {
+                const name = `q${qIndex + 1}`;
+                const selectedOption = document.querySelector(`input[name="${name}"]:checked`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === q.correct;
+                    
+                    // Highlight answers
+                    if (isCorrect) {
+                        selectedOption.parentElement.classList.add('bg-green-100');
+                        score++;
+                    } else {
+                        selectedOption.parentElement.classList.add('bg-red-100');
+                        // Highlight correct answer
+                        document.querySelector(`input[name="${name}"][value="${q.correct}"]`)
+                            .parentElement.classList.add('bg-green-100', 'border', 'border-green-500');
+                    }
+                }
+            });
+            
+            // Show score
+            const scoreHTML = `
+                <div class="mt-4 p-3 ${score === passage.questions.length ? 'bg-green-100' : 'bg-blue-100'} rounded-lg">
+                    <p class="font-medium">Your score: ${score}/${passage.questions.length}</p>
+                    <p class="text-sm mt-1">${score === passage.questions.length ? 'Perfect! Great job!' : 'Keep practicing!'}</p>
+                </div>
+            `;
+            
+            // Append score to quiz form
+            document.getElementById('readingQuiz').insertAdjacentHTML('beforeend', scoreHTML);
+            
+            // Disable the check button
+            document.getElementById('checkAnswersBtn').disabled = true;
+            document.getElementById('checkAnswersBtn').classList.add('opacity-50');
         }
     </script>
 </body>
