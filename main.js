@@ -179,6 +179,78 @@ function playPronunciation() {
     }
 }
 
+// Read passage aloud function
+function readPassageAloud() {
+    if (!('speechSynthesis' in window)) {
+        alert('Sorry, your browser does not support speech synthesis.');
+        return;
+    }
+    
+    const passageText = document.getElementById('passageText').textContent;
+    const readingStatus = document.getElementById('readingStatus');
+    
+    if (currentSpeech) {
+        speechSynthesis.cancel();
+        currentSpeech = null;
+        updateReadAloudButton(false);
+        if (readingStatus) readingStatus.classList.add('hidden');
+        return;
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(passageText);
+    utterance.lang = 'fr-FR';
+    utterance.rate = 0.9;
+    
+    // Show reading status
+    if (readingStatus) readingStatus.classList.remove('hidden');
+    
+    // Ensure voices are loaded
+    const setVoice = () => {
+        const voices = speechSynthesis.getVoices();
+        const frenchVoice = voices.find(voice => voice.lang === 'fr-FR');
+        if (frenchVoice) {
+            utterance.voice = frenchVoice;
+        } else {
+            console.log('No French voice available. Using default voice.');
+        }
+        
+        currentSpeech = utterance;
+        updateReadAloudButton(true);
+        
+        // Reset button when speech ends
+        utterance.onend = () => {
+            updateReadAloudButton(false);
+            currentSpeech = null;
+            if (readingStatus) readingStatus.classList.add('hidden');
+        };
+        
+        speechSynthesis.speak(utterance);
+    };
+    
+    // Check if voices are already loaded
+    if (speechSynthesis.getVoices().length > 0) {
+        setVoice();
+    } else {
+        speechSynthesis.onvoiceschanged = setVoice;
+    }
+}
+
+// Helper function to update the Read Aloud button state
+function updateReadAloudButton(isReading) {
+    const readAloudBtn = document.getElementById('readAloudBtn');
+    if (!readAloudBtn) return;
+    
+    if (isReading) {
+        readAloudBtn.innerHTML = '<i class="fas fa-pause mr-1"></i> Pause';
+        readAloudBtn.classList.remove('bg-blue-600');
+        readAloudBtn.classList.add('bg-yellow-600');
+    } else {
+        readAloudBtn.innerHTML = '<i class="fas fa-volume-up mr-1"></i> Read Aloud';
+        readAloudBtn.classList.remove('bg-yellow-600');
+        readAloudBtn.classList.add('bg-blue-600');
+    }
+}
+
 function markAsKnown() {
     const currentWord = filteredVocabulary[currentCardIndex];
     if (!knownWords.includes(currentWord.french)) {
@@ -360,6 +432,28 @@ function displayPassage(title) {
     document.getElementById('passageTitle').textContent = passage.title;
     document.getElementById('passageText').textContent = passage.text;
     
+    // Set up read aloud button
+    const readAloudBtn = document.getElementById('readAloudBtn');
+    if (readAloudBtn) {
+        // Remove any existing event listeners by cloning and replacing
+        const newReadAloudBtn = readAloudBtn.cloneNode(true);
+        readAloudBtn.parentNode.replaceChild(newReadAloudBtn, readAloudBtn);
+        
+        // Add new event listener to the fresh button
+        newReadAloudBtn.addEventListener('click', readPassageAloud);
+    }
+    
+    // Reset reading status
+    const readingStatus = document.getElementById('readingStatus');
+    if (readingStatus) readingStatus.classList.add('hidden');
+    
+    // If there's any ongoing speech, cancel it
+    if (currentSpeech) {
+        speechSynthesis.cancel();
+        currentSpeech = null;
+        updateReadAloudButton(false);
+    }
+    
     // Populate vocabulary
     const vocabContainer = document.getElementById('passageVocabulary');
     vocabContainer.innerHTML = '';
@@ -430,116 +524,116 @@ function checkAnswers() {
         let answered = false;
         let correct = false;
         
-        radioButtons.forEach((radio, rIndex) => {
-            // Check if this option was selected
-            if (radio.checked) {
-                answered = true;
-                
-                // Check if it's the correct answer
-                correct = rIndex === q.correct;
-                
-                // Mark visually
-                radio.parentElement.classList.add(correct ? 'text-green-700' : 'text-red-700');
-                
-                if (correct) score++;
+                radioButtons.forEach((radio, rIndex) => {
+                    // Check if this option was selected
+                    if (radio.checked) {
+                        answered = true;
+        
+                        // Check if it's the correct answer
+                        correct = rIndex === q.correct;
+        
+                        // Mark visually
+                        radio.parentElement.classList.add(correct ? 'text-green-700' : 'text-red-700');
+        
+                        if (correct) score++;
+                    }
+        
+                    // Disable all inputs after checking
+                    radio.disabled = true;
+                });
+        
+                if (!answered || !correct) allCorrect = false;
+            });
+        
+            // Show score
+            const scoreDiv = document.createElement('div');
+            scoreDiv.className = `mt-4 p-3 rounded score-result ${allCorrect ? 'bg-green-100' : 'bg-yellow-100'}`;
+            scoreDiv.innerHTML = `<p class="font-medium">Score: ${score}/${passage.questions.length} ${allCorrect ? '- Perfect!' : ''}</p>`;
+        
+            // Add a button to try again
+            const retryBtn = document.createElement('button');
+            retryBtn.className = 'mt-2 px-3 py-1 bg-blue-600 text-white rounded-md text-sm';
+            retryBtn.textContent = 'Try Again';
+            retryBtn.addEventListener('click', () => {
+                displayPassage(passageTitle);
+            });
+        
+            scoreDiv.appendChild(retryBtn);
+        
+            // Show the score after the Check Answers button
+            const checkBtn = document.getElementById('checkAnswersBtn');
+            checkBtn.parentElement.appendChild(scoreDiv);
+            checkBtn.disabled = true;
+        
+            // Mark passage as completed if perfect score
+            if (allCorrect && !completedPassages.includes(passageTitle)) {
+                completedPassages.push(passageTitle);
+                saveProgress();
+        
+                // Update the check mark on the passage list
+                const passageLinks = document.querySelectorAll(`a`);
+                passageLinks.forEach(link => {
+                    if (link.textContent.includes(passageTitle) && !link.innerHTML.includes('fa-check-circle')) {
+                        link.innerHTML += ` <i class="fas fa-check-circle text-green-500 ml-2"></i>`;
+                    }
+                });
+            }
+        }
+        
+                // Progress tracking
+                function updateProgress() {
+            const knownCountEl = document.getElementById('knownCount');
+            const unknownCountEl = document.getElementById('unknownCount');
+            const totalCountEl = document.getElementById('totalCount');
+            const totalCountUnknownEl = document.getElementById('totalCountUnknown');
+            const knownProgressEl = document.getElementById('knownProgress');
+            const unknownProgressEl = document.getElementById('unknownProgress');
+            
+            if (!knownCountEl || !unknownCountEl || !totalCountEl || !totalCountUnknownEl || !knownProgressEl || !unknownProgressEl) {
+                return; // Exit if any elements don't exist
             }
             
-            // Disable all inputs after checking
-            radio.disabled = true;
-        });
+            // Calculate total words in current category
+            const totalWords = filteredVocabulary.length;
+            
+            // Count known and unknown words in current category
+            const knownInCategory = filteredVocabulary.filter(word => knownWords.includes(word.french)).length;
+            const unknownInCategory = filteredVocabulary.filter(word => unknownWords.includes(word.french)).length;
+            
+            // Update counts
+            knownCountEl.textContent = knownInCategory;
+            unknownCountEl.textContent = unknownInCategory;
+            totalCountEl.textContent = totalWords;
+            totalCountUnknownEl.textContent = totalWords;
+            
+            // Update progress bars
+            const knownPercent = totalWords > 0 ? Math.round((knownInCategory / totalWords) * 100) : 0;
+            const unknownPercent = totalWords > 0 ? Math.round((unknownInCategory / totalWords) * 100) : 0;
+            
+            knownProgressEl.style.width = `${knownPercent}%`;
+            knownProgressEl.textContent = `${knownPercent}%`;
+            
+            unknownProgressEl.style.width = `${unknownPercent}%`;
+            unknownProgressEl.textContent = `${unknownPercent}%`;
+        }
         
-        if (!answered || !correct) allCorrect = false;
-    });
-    
-    // Show score
-    const scoreDiv = document.createElement('div');
-    scoreDiv.className = `mt-4 p-3 rounded score-result ${allCorrect ? 'bg-green-100' : 'bg-yellow-100'}`;
-    scoreDiv.innerHTML = `<p class="font-medium">Score: ${score}/${passage.questions.length} ${allCorrect ? '- Perfect!' : ''}</p>`;
-    
-    // Add a button to try again
-    const retryBtn = document.createElement('button');
-    retryBtn.className = 'mt-2 px-3 py-1 bg-blue-600 text-white rounded-md text-sm';
-    retryBtn.textContent = 'Try Again';
-    retryBtn.addEventListener('click', () => {
-        displayPassage(passageTitle);
-    });
-    
-    scoreDiv.appendChild(retryBtn);
-    
-    // Show the score after the Check Answers button
-    const checkBtn = document.getElementById('checkAnswersBtn');
-    checkBtn.parentElement.appendChild(scoreDiv);
-    checkBtn.disabled = true;
-    
-    // Mark passage as completed if perfect score
-    if (allCorrect && !completedPassages.includes(passageTitle)) {
-        completedPassages.push(passageTitle);
-        saveProgress();
+        // Save/load progress
+        function saveProgress() {
+            saveVocabularyProgress(knownWords, unknownWords);
+            saveReadingProgress(completedPassages);
+        }
         
-        // Update the check mark on the passage list
-        const passageLinks = document.querySelectorAll(`a`);
-        passageLinks.forEach(link => {
-            if (link.textContent.includes(passageTitle) && !link.innerHTML.includes('fa-check-circle')) {
-                link.innerHTML += ` <i class="fas fa-check-circle text-green-500 ml-2"></i>`;
+        function loadProgress() {
+            // Load vocabulary progress
+            const vocabProgress = loadVocabularyProgress();
+            if (vocabProgress) {
+                knownWords = vocabProgress.knownWords || [];
+                unknownWords = vocabProgress.unknownWords || [];
             }
-        });
-    }
-}
-
-// Progress tracking
-function updateProgress() {
-    const knownCountEl = document.getElementById('knownCount');
-    const unknownCountEl = document.getElementById('unknownCount');
-    const totalCountEl = document.getElementById('totalCount');
-    const totalCountUnknownEl = document.getElementById('totalCountUnknown');
-    const knownProgressEl = document.getElementById('knownProgress');
-    const unknownProgressEl = document.getElementById('unknownProgress');
-    
-    if (!knownCountEl || !unknownCountEl || !totalCountEl || !totalCountUnknownEl || !knownProgressEl || !unknownProgressEl) {
-        return; // Exit if any elements don't exist
-    }
-    
-    // Calculate total words in current category
-    const totalWords = filteredVocabulary.length;
-    
-    // Count known and unknown words in current category
-    const knownInCategory = filteredVocabulary.filter(word => knownWords.includes(word.french)).length;
-    const unknownInCategory = filteredVocabulary.filter(word => unknownWords.includes(word.french)).length;
-    
-    // Update counts
-    knownCountEl.textContent = knownInCategory;
-    unknownCountEl.textContent = unknownInCategory;
-    totalCountEl.textContent = totalWords;
-    totalCountUnknownEl.textContent = totalWords;
-    
-    // Update progress bars
-    const knownPercent = totalWords > 0 ? Math.round((knownInCategory / totalWords) * 100) : 0;
-    const unknownPercent = totalWords > 0 ? Math.round((unknownInCategory / totalWords) * 100) : 0;
-    
-    knownProgressEl.style.width = `${knownPercent}%`;
-    knownProgressEl.textContent = `${knownPercent}%`;
-    
-    unknownProgressEl.style.width = `${unknownPercent}%`;
-    unknownProgressEl.textContent = `${unknownPercent}%`;
-}
-
-// Save/load progress
-function saveProgress() {
-    saveVocabularyProgress(knownWords, unknownWords);
-    saveReadingProgress(completedPassages);
-}
-
-function loadProgress() {
-    // Load vocabulary progress
-    const vocabProgress = loadVocabularyProgress();
-    if (vocabProgress) {
-        knownWords = vocabProgress.knownWords || [];
-        unknownWords = vocabProgress.unknownWords || [];
-    }
-    
-    // Load reading progress
-    const readingProgress = loadReadingProgress();
-    if (readingProgress) {
-        completedPassages = readingProgress;
-    }
-}
+            
+            // Load reading progress
+            const readingProgress = loadReadingProgress();
+            if (readingProgress) {
+                completedPassages = readingProgress;
+            }
+        }
