@@ -18,10 +18,13 @@
         </header>
 
         <!-- Tab Navigation -->
-        <div class="flex border-b border-gray-200 mb-6">
-            <button data-tab="flashcards" class="px-4 py-2 mr-2 tab-active bg-blue-100 text-blue-700 rounded-t-lg">Flashcards</button>
-            <button data-tab="reading" class="px-4 py-2 mr-2 rounded-t-lg">Reading</button>
-            <button data-tab="search" class="px-4 py-2 mr-2 rounded-t-lg">Search</button>
+        <div class="flex flex-wrap border-b border-gray-200 mb-6">
+            <button data-tab="flashcards" class="px-4 py-2 mr-2 mb-2 tab-active bg-blue-100 text-blue-700 rounded-t-lg">Flashcards</button>
+            <button data-tab="reading" class="px-4 py-2 mr-2 mb-2 rounded-t-lg">Reading</button>
+            <button data-tab="grammar" class="px-4 py-2 mr-2 mb-2 rounded-t-lg">Grammar</button>
+            <button data-tab="writing" class="px-4 py-2 mr-2 mb-2 rounded-t-lg">Writing</button>
+            <button data-tab="speaking" class="px-4 py-2 mr-2 mb-2 rounded-t-lg">Speaking</button>
+            <button data-tab="search" class="px-4 py-2 mr-2 mb-2 rounded-t-lg">Search</button>
         </div>
 
         <!-- Tab Contents -->
@@ -139,6 +142,199 @@
             </div>
         </div>
         
+        <!-- Grammar Tab -->
+        <div id="grammar" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Beginner</h3>
+                    <ul id="beginnerGrammar" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Intermediate</h3>
+                    <ul id="intermediateGrammar" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Advanced</h3>
+                    <ul id="advancedGrammar" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="grammarContent" class="bg-white p-6 rounded-lg shadow-md hidden">
+                <h3 id="grammarTitle" class="text-xl font-bold mb-4"></h3>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2">Explanation</h4>
+                    <div id="grammarExplanation" class="prose"></div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2">Examples</h4>
+                    <ul id="grammarExamples" class="space-y-2 list-disc pl-5">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Practice Exercises</h4>
+                    <div id="grammarExercises">
+                        <!-- Will be populated by JS -->
+                    </div>
+                    <button id="checkGrammarBtn" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md">Check Answers</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Writing Tab -->
+        <div id="writing" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Writing Prompts</h3>
+                    <ul id="writingPrompts" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Saved Essays</h3>
+                    <ul id="savedEssays" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="writingContent" class="bg-white p-6 rounded-lg shadow-md hidden">
+                <h3 id="writingTitle" class="text-xl font-bold mb-4"></h3>
+                
+                <div class="mb-4">
+                    <span class="inline-block text-sm text-gray-600 mb-1">Level: <span id="writingLevel" class="font-medium"></span></span>
+                    <span class="inline-block text-sm text-gray-600 mb-1 ml-4">Time: <span id="writingTime" class="font-medium"></span> minutes</span>
+                    <span class="inline-block text-sm text-gray-600 mb-1 ml-4">Word Target: <span id="writingWords" class="font-medium"></span> words</span>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold mb-2">Instructions</h4>
+                    <p id="writingInstructions" class="text-gray-700"></p>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2">Your Response (<span id="currentWordCount">0</span> words)</h4>
+                    <div class="flex flex-col">
+                        <div class="flex justify-between mb-2">
+                            <button id="startTimerBtn" class="px-3 py-1 bg-blue-600 text-white rounded-md text-sm">
+                                <i class="fas fa-clock mr-1"></i> Start Timer
+                            </button>
+                            <span id="timerDisplay" class="text-sm py-1 px-2 bg-gray-100 rounded hidden">00:00</span>
+                        </div>
+                        <textarea id="writingResponse" rows="10" 
+                                class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Write your response in French here..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="saveEssayBtn" class="px-4 py-2 bg-green-600 text-white rounded-md">
+                        <i class="fas fa-save mr-1"></i> Save Draft
+                    </button>
+                    <button id="submitEssayBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+                        <i class="fas fa-paper-plane mr-1"></i> Submit for Feedback
+                    </button>
+                </div>
+                
+                <!-- Feedback section (initially hidden) -->
+                <div id="feedbackSection" class="mt-6 border-t pt-4 hidden">
+                    <h4 class="text-lg font-semibold mb-2">Feedback</h4>
+                    <div id="feedbackContent" class="p-4 bg-gray-50 rounded-md"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Speaking Tab -->
+        <div id="speaking" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Speaking Exercises</h3>
+                    <ul id="speakingExercises" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-2">Pronunciation Practice</h3>
+                    <ul id="pronunciationExercises" class="space-y-2">
+                        <!-- Will be populated by JS -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="speakingContent" class="bg-white p-6 rounded-lg shadow-md hidden">
+                <h3 id="speakingTitle" class="text-xl font-bold mb-4"></h3>
+                
+                <div class="mb-4">
+                    <span class="inline-block text-sm text-gray-600 mb-1">Level: <span id="speakingLevel" class="font-medium"></span></span>
+                    <span class="inline-block text-sm text-gray-600 mb-1 ml-4">Time: <span id="speakingTime" class="font-medium"></span> seconds</span>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold mb-2">Instructions</h4>
+                    <p id="speakingInstructions" class="text-gray-700"></p>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold mb-2">Example</h4>
+                    <div class="flex items-center">
+                        <button id="playExampleBtn" class="px-3 py-2 bg-blue-600 text-white rounded-md mr-3">
+                            <i class="fas fa-play mr-1"></i> Play Example
+                        </button>
+                        <p id="exampleText" class="text-gray-700"></p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2">Your Response</h4>
+                    <div class="flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <button id="startRecordingBtn" class="px-4 py-2 bg-red-600 text-white rounded-md mr-3">
+                                <i class="fas fa-microphone mr-1"></i> Start Recording
+                            </button>
+                            <span id="recordingTimer" class="text-sm py-1 px-2 bg-gray-100 rounded hidden">0s</span>
+                        </div>
+                        
+                        <div id="audioPlayer" class="hidden w-full mb-4">
+                            <audio id="recordedAudio" controls class="w-full"></audio>
+                        </div>
+                        
+                        <div class="flex">
+                            <button id="retryRecordingBtn" class="px-4 py-2 bg-gray-600 text-white rounded-md mr-2 hidden">
+                                <i class="fas fa-redo mr-1"></i> Retry
+                            </button>
+                            <button id="submitRecordingBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hidden">
+                                <i class="fas fa-paper-plane mr-1"></i> Submit Recording
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pronunciation score section (initially hidden) -->
+                <div id="pronunciationFeedback" class="mt-6 border-t pt-4 hidden">
+                    <h4 class="text-lg font-semibold mb-2">Pronunciation Feedback</h4>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Overall Score:</span>
+                            <span id="pronunciationScore" class="font-bold"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full">
+                            <div id="pronunciationScoreBar" class="bg-blue-600 text-xs text-white text-center p-0.5 rounded-full" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                    <div id="detailedFeedback" class="p-4 bg-gray-50 rounded-md"></div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Search Tab -->
         <div id="search" class="tab-content hidden">
             <div class="flex mb-4">
@@ -176,8 +372,11 @@
                     setTimeout(() => {
                         const vocabLoaded = window.vocabLoaded;
                         const readingLoaded = window.readingLoaded;
+                        const grammarLoaded = window.grammarLoaded;
+                        const writingLoaded = window.writingLoaded;
+                        const speakingLoaded = window.speakingLoaded;
                         
-                        if (vocabLoaded && readingLoaded) {
+                        if (vocabLoaded && readingLoaded && grammarLoaded && writingLoaded && speakingLoaded) {
                             statusContent.innerHTML = 
                                 `<p class="text-green-600"><i class="fas fa-check-circle"></i> All modules loaded successfully!</p>`;
                             
@@ -191,6 +390,9 @@
                                 <ul class="list-disc ml-6 mt-2">
                                     <li>Vocabulary module: ${vocabLoaded ? 'Loaded ✓' : 'Not loaded ✗'}</li>
                                     <li>Reading module: ${readingLoaded ? 'Loaded ✓' : 'Not loaded ✗'}</li>
+                                    <li>Grammar module: ${grammarLoaded ? 'Loaded ✓' : 'Not loaded ✗'}</li>
+                                    <li>Writing module: ${writingLoaded ? 'Loaded ✓' : 'Not loaded ✗'}</li>
+                                    <li>Speaking module: ${speakingLoaded ? 'Loaded ✓' : 'Not loaded ✗'}</li>
                                 </ul>
                                 <p class="mt-2">Please check the console for more details.</p>`;
                         }
