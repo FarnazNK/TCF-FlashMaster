@@ -7,63 +7,108 @@ let grammarTopics, saveGrammarProgress, loadGrammarProgress;
 let writingPrompts, generateFeedback, saveEssay, loadSavedEssays, analyzeEssay;
 let speakingExercises, pronunciationExercises, generatePronunciationFeedback, saveSpeakingPractice, loadSavedPractices;
 
-try {
-  const vocabModule = await import('./vocabulary-module.js');
-  ({
-    vocabulary,
-    filterVocabularyByCategory,
-    searchVocabulary,
-    saveVocabularyProgress,
-    loadVocabularyProgress
-  } = vocabModule);
-} catch (error) {
-  console.error('Failed to load vocabulary module:', error);
-}
+async function loadModules() {
+  function updateModuleStatus(moduleId, isLoaded, error = null) {
+    const statusElement = document.getElementById(moduleId);
+    if (statusElement) {
+      statusElement.textContent = isLoaded ? 'Loaded ✓' : `Not loaded ✗${error ? `: ${error.message}` : ''}`;
+      statusElement.className = isLoaded ? 'text-green-600' : 'text-red-600';
+    } else {
+      console.warn(`Status element for ${moduleId} not found`);
+    }
+  }
 
-try {
-  const readingModule = await import('./reading-module.js');
-  ({
-    readingPassages,
-    getPassagesByLevel,
-    getPassageByTitle,
-    saveReadingProgress,
-    loadReadingProgress
-  } = readingModule);
-} catch (error) {
-  console.error('Failed to load reading module:', error);
-}
+  try {
+    console.log('Attempting to load vocabulary module...');
+    const vocabModule = await import('./vocabulary-module.js');
+    ({
+      vocabulary,
+      filterVocabularyByCategory,
+      searchVocabulary,
+      saveVocabularyProgress,
+      loadVocabularyProgress
+    } = vocabModule);
+    console.log('Vocabulary module loaded:', { vocabularyLength: vocabulary?.length });
+    updateModuleStatus('vocabularyStatus', true);
+    window.vocabLoaded = true;
+  } catch (error) {
+    console.error('Failed to load vocabulary module:', error);
+    updateModuleStatus('vocabularyStatus', false, error);
+    window.vocabLoaded = false;
+  }
 
-try {
-  const grammarModule = await import('./grammar-module.js');
-  ({ grammarTopics, saveGrammarProgress, loadGrammarProgress } = grammarModule);
-} catch (error) {
-  console.error('Failed to load grammar module:', error);
-}
+  try {
+    console.log('Attempting to load reading module...');
+    const readingModule = await import('./reading-module.js');
+    ({
+      readingPassages,
+      getPassagesByLevel,
+      getPassageByTitle,
+      saveReadingProgress,
+      loadReadingProgress
+    } = readingModule);
+    console.log('Reading module loaded:', { passagesLength: readingPassages?.length });
+    updateModuleStatus('readingStatus', true);
+    window.readingLoaded = true;
+  } catch (error) {
+    console.error('Failed to load reading module:', error);
+    updateModuleStatus('readingStatus', false, error);
+    window.readingLoaded = false;
+  }
 
-try {
-  const writingModule = await import('./writing-module.js');
-  ({
-    writingPrompts,
-    generateFeedback,
-    saveEssay,
-    loadSavedEssays,
-    analyzeEssay
-  } = writingModule);
-} catch (error) {
-  console.error('Failed to load writing module:', error);
-}
+  try {
+    console.log('Attempting to load grammar module...');
+    const grammarModule = await import('./grammar-module.js');
+    ({ grammarTopics, saveGrammarProgress, loadGrammarProgress } = grammarModule);
+    console.log('Grammar module loaded:', { topicsLength: grammarTopics?.length });
+    updateModuleStatus('grammarStatus', true);
+    window.grammarLoaded = true;
+  } catch (error) {
+    console.error('Failed to load grammar module:', error);
+    updateModuleStatus('grammarStatus', false, error);
+    window.grammarLoaded = false;
+  }
 
-try {
-  const speakingModule = await import('./speaking-module.js');
-  ({
-    speakingExercises,
-    pronunciationExercises,
-    generatePronunciationFeedback,
-    saveSpeakingPractice,
-    loadSavedPractices
-  } = speakingModule);
-} catch (error) {
-  console.error('Failed to load speaking module:', error);
+  try {
+    console.log('Attempting to load writing module...');
+    const writingModule = await import('./writing-module.js');
+    ({
+      writingPrompts,
+      generateFeedback,
+      saveEssay,
+      loadSavedEssays,
+      analyzeEssay
+    } = writingModule);
+    console.log('Writing module loaded:', { promptsLength: writingPrompts?.length });
+    updateModuleStatus('writingStatus', true);
+    window.writingLoaded = true;
+  } catch (error) {
+    console.error('Failed to load writing module:', error);
+    updateModuleStatus('writingStatus', false, error);
+    window.writingLoaded = false;
+  }
+
+  try {
+    console.log('Attempting to load speaking module...');
+    const speakingModule = await import('./speaking-module.js');
+    ({
+      speakingExercises,
+      pronunciationExercises,
+      generatePronunciationFeedback,
+      saveSpeakingPractice,
+      loadSavedPractices
+    } = speakingModule);
+    console.log('Speaking module loaded:', {
+      speakingLength: speakingExercises?.length,
+      pronunciationLength: pronunciationExercises?.length
+    });
+    updateModuleStatus('speakingStatus', true);
+    window.speakingLoaded = true;
+  } catch (error) {
+    console.error('Failed to load speaking module:', error);
+    updateModuleStatus('speakingStatus', false, error);
+    window.speakingLoaded = false;
+  }
 }
 
 // Declare global state
@@ -83,9 +128,10 @@ let audioChunks = [];
 let recordedAudio = null;
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   try {
     console.log('DOM Content Loaded');
+    await loadModules();
     loadProgress();
     initializeTabs();
     initializeFlashcards();
