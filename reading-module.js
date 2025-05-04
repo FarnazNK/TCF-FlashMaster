@@ -1,6 +1,3 @@
-// reading.js - TCF Reading Passages Module
-
-// Export the reading passages data
 export const readingPassages = [
     {
         title: "Une journée à Paris",
@@ -211,10 +208,99 @@ export const readingPassages = [
                 correct: 1
             }
         ]
+    },
+    {
+        title: "Une aventure en montagne",
+        level: "intermediate",
+        text: "L'été dernier, j'ai décidé de partir en randonnée dans les Alpes françaises avec un groupe d'amis. Nous avons préparé nos sacs à dos avec tout le nécessaire : des vêtements chauds, de la nourriture, une tente et une trousse de premiers secours. Le premier jour, nous avons marché pendant six heures pour atteindre un refuge en haut d'une montagne. La vue était spectaculaire, avec des sommets enneigés et des vallées verdoyantes tout autour de nous. Le lendemain, nous avons continué notre chemin à travers des sentiers escarpés. À un moment, nous avons dû traverser une rivière à l'aide d'une corde tendue entre les deux rives. Ce fut un moment excitant mais aussi un peu effrayant ! Après trois jours d'efforts, nous sommes arrivés au sommet principal, où nous avons célébré notre réussite avec un pique-nique. Cette aventure m'a appris l'importance de la persévérance et du travail en équipe. De retour en ville, j'ai ressenti une immense satisfaction et j'ai déjà commencé à planifier ma prochaine randonnée.",
+        vocabulary: [
+            { word: "randonnée", definition: "hiking" },
+            { word: "nécessaire", definition: "necessary items" },
+            { word: "refuge", definition: "shelter" },
+            { word: "spectaculaire", definition: "spectacular" },
+            { word: "escarpé", definition: "steep" },
+            { word: "persévérance", definition: "perseverance" }
+        ],
+        questions: [
+            {
+                question: "Où s'est déroulée la randonnée du narrateur?",
+                options: ["Dans les Pyrénées", "Dans les Alpes françaises", "Dans les Vosges"],
+                correct: 1
+            },
+            {
+                question: "Qu'ont-ils dû traverser à l'aide d'une corde?",
+                options: ["Un lac", "Une rivière", "Un ravin"],
+                correct: 1
+            },
+            {
+                question: "Qu'a appris le narrateur de cette expérience?",
+                options: ["À cuisiner en plein air", "L'importance de la persévérance et du travail en équipe", "À grimper sans équipement"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "La vie à la campagne",
+        level: "elementary",
+        text: "Depuis deux ans, je vis dans un petit village à la campagne. Ma maison est entourée de champs et de forêts. Chaque matin, je me réveille avec le chant des oiseaux. Je cultive un potager où je fais pousser des tomates, des carottes et des courgettes. J'ai aussi des poules qui me donnent des œufs frais tous les jours. La vie ici est calme et simple, loin du bruit et de l'agitation de la ville. Mes voisins sont très gentils et nous nous entraidons souvent. Par exemple, l'autre jour, mon voisin Pierre m'a aidé à réparer ma clôture. Le weekend, j'aime faire du vélo sur les chemins de campagne ou lire un livre sous un arbre. Même si parfois je retourne en ville pour voir ma famille, je suis très heureux de ma nouvelle vie à la campagne.",
+        vocabulary: [
+            { word: "campagne", definition: "countryside" },
+            { word: "entourée", definition: "surrounded" },
+            { word: "potager", definition: "vegetable garden" },
+            { word: "agitation", definition: "hustle and bustle" },
+            { word: "s'entraider", definition: "to help each other" },
+            { word: "clôture", definition: "fence" }
+        ],
+        questions: [
+            {
+                question: "Où vit le narrateur depuis deux ans?",
+                options: ["En ville", "À la campagne", "À la plage"],
+                correct: 1
+            },
+            {
+                question: "Que cultive-t-il dans son potager?",
+                options: ["Des pommes, des poires", "Des tomates, des carottes, des courgettes", "Des fraises, des framboises"],
+                correct: 1
+            },
+            {
+                question: "Que fait-il le weekend?",
+                options: ["Il fait du vélo ou lit un livre", "Il va au cinéma", "Il travaille dans son jardin"],
+                correct: 0
+            }
+        ]
+    },
+    {
+        title: "L'histoire de l'art",
+        level: "upperIntermediate",
+        text: "L'art a toujours joué un rôle central dans l'histoire de l'humanité, reflétant les croyances, les valeurs et les préoccupations des sociétés à travers les siècles. À l'époque préhistorique, les peintures rupestres, comme celles de Lascaux en France, représentaient des scènes de chasse et des animaux, probablement dans un but rituel ou spirituel. Au Moyen Âge, l'art religieux dominait, avec des vitraux et des fresques qui ornaient les églises pour enseigner les histoires bibliques aux fidèles. La Renaissance, à partir du XVe siècle, a marqué un tournant majeur avec des artistes comme Léonard de Vinci et Michel-Ange, qui ont introduit des techniques de perspective et une représentation plus réaliste du corps humain. Au XIXe siècle, les mouvements comme l'impressionnisme, avec des figures telles que Claude Monet, ont rompu avec les conventions académiques pour capturer la lumière et l'instantanéité. Aujourd'hui, l'art contemporain explore une multitude de médiums, allant de la peinture à l'installation numérique, et pose des questions sur la société, l'identité et l'environnement. L'art, sous toutes ses formes, reste un miroir de l'âme humaine et un moyen d'expression universel.",
+        vocabulary: [
+            { word: "peintures rupestres", definition: "cave paintings" },
+            { word: "rituel", definition: "ritual" },
+            { word: "vitraux", definition: "stained glass windows" },
+            { word: "perspective", definition: "perspective" },
+            { word: "instantanéité", definition: "immediacy" },
+            { word: "médiums", definition: "mediums" }
+        ],
+        questions: [
+            {
+                question: "Quel était le probable but des peintures rupestres préhistoriques?",
+                options: ["Décorer les grottes", "Un but rituel ou spirituel", "Enseigner l'histoire"],
+                correct: 1
+            },
+            {
+                question: "Quel mouvement artistique a introduit des techniques de perspective?",
+                options: ["L'impressionnisme", "La Renaissance", "L'art contemporain"],
+                correct: 1
+            },
+            {
+                question: "Que reflète l'art selon le texte?",
+                options: ["Seulement les croyances religieuses", "Les croyances, les valeurs et les préoccupations des sociétés", "Uniquement les préoccupations environnementales"],
+                correct: 1
+            }
+        ]
     }
 ];
 
-// Reading-related utility functions
 export function getPassagesByLevel(level) {
     return readingPassages.filter(passage => passage.level === level);
 }
@@ -235,5 +321,4 @@ export function loadReadingProgress() {
     return [];
 }
 
-// Set the loaded flag after all exports
 window.readingLoaded = true;
