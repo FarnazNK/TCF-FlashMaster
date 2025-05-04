@@ -298,6 +298,306 @@ export const readingPassages = [
                 correct: 1
             }
         ]
+    },
+    {
+        title: "Un voyage à la mer",
+        level: "beginner",
+        text: "L'été dernier, ma famille et moi sommes allés à la mer. Nous avons passé une semaine dans une petite ville près de la plage. Chaque matin, nous marchions jusqu'à la plage pour nager et jouer dans le sable. L'eau était claire et chaude. À midi, nous mangions des poissons frais dans un restaurant en bord de mer. L'après-midi, nous faisions des promenades le long de la côte ou nous visitions les marchés locaux. Un jour, nous avons pris un bateau pour voir des dauphins, c'était incroyable ! Le soir, nous regardions le coucher du soleil depuis notre balcon. Ces vacances étaient parfaites, et j'ai hâte de retourner à la mer.",
+        vocabulary: [
+            { word: "plage", definition: "beach" },
+            { word: "nager", definition: "to swim" },
+            { word: "sable", definition: "sand" },
+            { word: "poissons frais", definition: "fresh fish" },
+            { word: "côte", definition: "coast" },
+            { word: "coucher du soleil", definition: "sunset" }
+        ],
+        questions: [
+            {
+                question: "Où la famille du narrateur a-t-elle passé ses vacances?",
+                options: ["À la montagne", "À la mer", "En ville"],
+                correct: 1
+            },
+            {
+                question: "Que faisaient-ils chaque matin?",
+                options: ["Ils visitaient des musées", "Ils nageaient et jouaient dans le sable", "Ils prenaient un bateau"],
+                correct: 1
+            },
+            {
+                question: "Qu'ont-ils vu lors d'une sortie en bateau?",
+                options: ["Des oiseaux", "Des dauphins", "Des poissons"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "Mon premier jour d'école",
+        level: "elementary",
+        text: "Je me souviens de mon premier jour à l'école primaire comme si c'était hier. J'avais six ans et j'étais très excité, mais aussi un peu nerveux. Ma mère m'a accompagné jusqu'à la porte de l'école, où j'ai rencontré ma maîtresse, Madame Dubois. Elle était gentille et souriante. Dans la classe, il y avait beaucoup d'enfants, et j'ai tout de suite fait un nouvel ami, Thomas. Nous avons appris à écrire nos noms et à compter jusqu'à dix. À la récréation, nous avons joué dans la cour avec un ballon. À midi, j'ai mangé un sandwich et une pomme dans la cantine. L'après-midi, nous avons dessiné des animaux et chanté une chanson. En rentrant chez moi, j'ai raconté toute ma journée à mes parents. Ce jour-là, j'ai compris que l'école était un endroit amusant et plein de surprises.",
+        vocabulary: [
+            { word: "excité", definition: "excited" },
+            { word: "nerveux", definition: "nervous" },
+            { word: "maîtresse", definition: "teacher (female)" },
+            { word: "récréation", definition: "recess" },
+            { word: "cantine", definition: "canteen" },
+            { word: "dessiner", definition: "to draw" }
+        ],
+        questions: [
+            {
+                question: "Quel âge avait le narrateur lors de son premier jour d'école?",
+                options: ["Cinq ans", "Six ans", "Sept ans"],
+                correct: 1
+            },
+            {
+                question: "Que faisaient les enfants pendant la récréation?",
+                options: ["Ils chantaient", "Ils jouaient avec un ballon", "Ils mangeaient"],
+                correct: 1
+            },
+            {
+                question: "Qu'a fait le narrateur après l'école?",
+                options: ["Il a joué avec Thomas", "Il a raconté sa journée à ses parents", "Il a dessiné des animaux"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "La fête du village",
+        level: "intermediate",
+        text: "Chaque année, mon village organise une grande fête en été. Cette année, la fête a eu lieu en juillet, et tout le monde était enthousiaste. Les rues étaient décorées avec des guirlandes colorées et des drapeaux. Le matin, il y avait un marché où les habitants vendaient des produits locaux : du fromage, du miel et des fruits frais. À midi, nous nous sommes tous réunis sur la place principale pour un grand repas. Chacun avait apporté quelque chose à partager, comme des tartes, des salades ou des gâteaux. L'après-midi, il y avait des jeux pour les enfants, comme une course en sac et un concours de dessin. Le soir, un groupe de musique a joué des chansons traditionnelles, et tout le monde a dansé jusqu'à minuit. Cette fête est une occasion spéciale pour renforcer les liens entre les habitants et célébrer notre communauté. J'attends déjà l'année prochaine avec impatience.",
+        vocabulary: [
+            { word: "guirlandes", definition: "garlands" },
+            { word: "enthousiaste", definition: "enthusiastic" },
+            { word: "produits locaux", definition: "local products" },
+            { word: "réunis", definition: "gathered" },
+            { word: "course en sac", definition: "sack race" },
+            { word: "renforcer", definition: "to strengthen" }
+        ],
+        questions: [
+            {
+                question: "Quand la fête du village a-t-elle eu lieu cette année?",
+                options: ["En juin", "En juillet", "En août"],
+                correct: 1
+            },
+            {
+                question: "Qu'est-ce que les habitants vendaient au marché?",
+                options: ["Des vêtements", "Du fromage, du miel et des fruits", "Des livres"],
+                correct: 1
+            },
+            {
+                question: "Pourquoi la fête est-elle importante selon le narrateur?",
+                options: ["Pour gagner des prix", "Pour renforcer les liens entre les habitants", "Pour voyager"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "La technologie et la société",
+        level: "upperIntermediate",
+        text: "La technologie a transformé notre façon de vivre, de travailler et de communiquer. Grâce à Internet, nous pouvons accéder à une quantité immense d'informations en quelques secondes. Les réseaux sociaux permettent de rester en contact avec des amis et des collègues à travers le monde, mais ils soulèvent aussi des questions sur la vie privée et la dépendance numérique. Dans le domaine du travail, les machines et l'intelligence artificielle remplacent certaines tâches manuelles, ce qui améliore l'efficacité mais crée des inquiétudes sur l'emploi. Dans les écoles, les tablettes et les ordinateurs sont devenus des outils courants, rendant l'apprentissage plus interactif, mais certains craignent que les enfants passent trop de temps devant les écrans. Malgré ces défis, la technologie offre des opportunités incroyables, comme les avancées médicales ou les solutions pour réduire l'impact environnemental. Pour en tirer le meilleur parti, il est crucial de trouver un équilibre entre l'utilisation de la technologie et le maintien des relations humaines authentiques.",
+        vocabulary: [
+            { word: "transformer", definition: "to transform" },
+            { word: "réseaux sociaux", definition: "social networks" },
+            { word: "vie privée", definition: "privacy" },
+            { word: "efficacité", definition: "efficiency" },
+            { word: "interactif", definition: "interactive" },
+            { word: "avancées", definition: "advances" }
+        ],
+        questions: [
+            {
+                question: "Quels sont les avantages des réseaux sociaux mentionnés dans le texte?",
+                options: ["Ils protègent la vie privée", "Ils permettent de rester en contact avec des amis", "Ils réduisent le temps devant les écrans"],
+                correct: 1
+            },
+            {
+                question: "Quel est un impact négatif de l'intelligence artificielle selon le texte?",
+                options: ["Elle augmente les coûts", "Elle crée des inquiétudes sur l'emploi", "Elle ralentit l'efficacité"],
+                correct: 1
+            },
+            {
+                question: "Que faut-il faire pour tirer le meilleur parti de la technologie?",
+                options: ["Utiliser uniquement les ordinateurs", "Trouver un équilibre avec les relations humaines", "Éviter les écrans à l'école"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "Un week-end à la ferme",
+        level: "elementary",
+        text: "Le mois dernier, j'ai passé un week-end dans une ferme avec ma famille. La ferme était située dans une belle région pleine de collines et de champs verts. Le premier jour, nous avons aidé le fermier, Monsieur Martin, à nourrir les animaux. Il y avait des vaches, des moutons et des poules. J'ai même appris à traire une vache, ce qui était très amusant ! Ensuite, nous avons ramassé des légumes dans le jardin : des carottes, des pommes de terre et des salades. Le soir, Madame Martin nous a préparé un délicieux dîner avec les produits de la ferme. Le lendemain, nous avons fait une promenade à travers la forêt et nous avons vu un petit ruisseau. Ce week-end m'a montré à quel point la vie à la ferme est intéressante et pleine de découvertes. J'aimerais y retourner bientôt.",
+        vocabulary: [
+            { word: "ferme", definition: "farm" },
+            { word: "nourrir", definition: "to feed" },
+            { word: "traire", definition: "to milk" },
+            { word: "ramasser", definition: "to pick/gather" },
+            { word: "ruisseau", definition: "stream" },
+            { word: "découvertes", definition: "discoveries" }
+        ],
+        questions: [
+            {
+                question: "Où se trouvait la ferme?",
+                options: ["En ville", "Dans une région avec des collines", "À la plage"],
+                correct: 1
+            },
+            {
+                question: "Qu'a fait le narrateur le premier jour?",
+                options: ["Il a cuisiné", "Il a nourri les animaux", "Il a fait une promenade"],
+                correct: 1
+            },
+            {
+                question: "Qu'a-t-il appris de ce week-end?",
+                options: ["Que la vie à la ferme est intéressante", "Comment conduire un tracteur", "Que la ferme est ennuyeuse"],
+                correct: 0
+            }
+        ]
+    },
+    {
+        title: "Une visite au zoo",
+        level: "beginner",
+        text: "Le week-end dernier, j'ai visité le zoo avec mes cousins. Nous avons vu beaucoup d'animaux : des lions, des éléphants, des girafes et même des pingouins ! Les lions dormaient sous un arbre, mais les girafes mangeaient des feuilles très haut. Mon animal préféré était le panda, il jouait avec un ballon. Nous avons aussi assisté à un spectacle où les otaries faisaient des acrobaties dans l'eau. À la fin de la journée, nous avons acheté des souvenirs à la boutique du zoo. C'était une journée amusante et j'ai appris beaucoup de choses sur les animaux.",
+        vocabulary: [
+            { word: "zoo", definition: "zoo" },
+            { word: "animaux", definition: "animals" },
+            { word: "girafes", definition: "giraffes" },
+            { word: "pingouins", definition: "penguins" },
+            { word: "otaries", definition: "sea lions" },
+            { word: "souvenirs", definition: "souvenirs" }
+        ],
+        questions: [
+            {
+                question: "Avec qui le narrateur a-t-il visité le zoo?",
+                options: ["Ses amis", "Ses cousins", "Ses parents"],
+                correct: 1
+            },
+            {
+                question: "Quel était l'animal préféré du narrateur?",
+                options: ["Le lion", "La girafe", "Le panda"],
+                correct: 2
+            },
+            {
+                question: "Qu'ont-ils fait à la fin de la journée?",
+                options: ["Ils ont mangé au restaurant", "Ils ont acheté des souvenirs", "Ils ont regardé un film"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "Mon stage en entreprise",
+        level: "intermediate",
+        text: "L'année dernière, j'ai effectué un stage de deux mois dans une entreprise de communication. Mon rôle consistait à aider l'équipe à créer des affiches et des publications pour les réseaux sociaux. Le premier jour, j'étais un peu intimidé, mais mes collègues m'ont tout de suite mis à l'aise. Chaque matin, nous avions une réunion pour discuter des projets de la journée. J'ai appris à utiliser des logiciels de design et à rédiger des messages clairs et attrayants. Parfois, je participais à des réunions avec des clients pour présenter nos idées. Ce stage m'a permis de développer mes compétences professionnelles et de mieux comprendre le monde du travail. À la fin, mon responsable m'a félicité pour mon travail, et j'ai même reçu une proposition pour un emploi à temps partiel. Cette expérience m'a donné confiance en moi et m'a motivé à poursuivre dans ce domaine.",
+        vocabulary: [
+            { word: "stage", definition: "internship" },
+            { word: "affiches", definition: "posters" },
+            { word: "intimidé", definition: "intimidated" },
+            { word: "réunion", definition: "meeting" },
+            { word: "logiciels", definition: "software" },
+            { word: "compétences", definition: "skills" }
+        ],
+        questions: [
+            {
+                question: "Quel était le rôle du narrateur pendant son stage?",
+                options: ["Créer des sites web", "Aider à créer des affiches et publications", "Vendre des produits"],
+                correct: 1
+            },
+            {
+                question: "Que faisait l'équipe chaque matin?",
+                options: ["Ils rencontraient des clients", "Ils avaient une réunion", "Ils travaillaient seuls"],
+                correct: 1
+            },
+            {
+                question: "Quel a été le résultat du stage pour le narrateur?",
+                options: ["Il a abandonné ses études", "Il a reçu une proposition d'emploi", "Il a changé de carrière"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "Un pique-nique au parc",
+        level: "elementary",
+        text: "Dimanche dernier, mes amis et moi avons organisé un pique-nique dans un grand parc près de la ville. Nous avons apporté une grande couverture, des sandwiches, des fruits et des boissons fraîches. Le temps était parfait, avec un ciel bleu et une légère brise. Après avoir mangé, nous avons joué au frisbee et au badminton. Ensuite, nous nous sommes reposés sous un grand arbre et nous avons écouté de la musique. Quelques enfants jouaient près d'un lac, et nous avons vu des canards nager. À la fin de l'après-midi, nous avons ramassé nos affaires et nous sommes rentrés chez nous, fatigués mais heureux. Ce pique-nique était une belle façon de passer du temps ensemble.",
+        vocabulary: [
+            { word: "pique-nique", definition: "picnic" },
+            { word: "couverture", definition: "blanket" },
+            { word: "brise", definition: "breeze" },
+            { word: "frisbee", definition: "frisbee" },
+            { word: "reposer", definition: "to rest" },
+            { word: "canards", definition: "ducks" }
+        ],
+        questions: [
+            {
+                question: "Où s'est déroulé le pique-nique?",
+                options: ["Dans un jardin", "Dans un parc", "À la plage"],
+                correct: 1
+            },
+            {
+                question: "Qu'ont-ils fait après avoir mangé?",
+                options: ["Ils ont nagé", "Ils ont joué au frisbee et au badminton", "Ils ont chanté"],
+                correct: 1
+            },
+            {
+                question: "Qu'ont-ils vu près du lac?",
+                options: ["Des poissons", "Des canards", "Des oiseaux"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "La cuisine française",
+        level: "upperIntermediate",
+        text: "La cuisine française est célèbre dans le monde entier pour sa diversité et son raffinement. Chaque région de France a ses propres spécialités, reflétant les produits locaux et les traditions. En Normandie, par exemple, on trouve des plats à base de crème et de pommes, comme le poulet à la normande. En Provence, les herbes aromatiques et l'huile d'olive dominent, avec des plats comme la ratatouille. La cuisine française inclut aussi des classiques universels, comme le coq au vin ou la tarte Tatin. Les repas en France sont souvent un moment de partage, accompagnés de vin et de fromage, deux éléments essentiels de la culture gastronomique. De plus, la pâtisserie française, avec des desserts comme les macarons et les éclairs, est considérée comme un art. Cependant, la cuisine française évolue, intégrant des influences internationales tout en préservant son identité. Apprendre à cuisiner français, c'est découvrir une partie de l'histoire et de l'âme de la France.",
+        vocabulary: [
+            { word: "raffinement", definition: "refinement" },
+            { word: "spécialités", definition: "specialties" },
+            { word: "herbes aromatiques", definition: "aromatic herbs" },
+            { word: "dominants", definition: "predominant" },
+            { word: "gastronomique", definition: "gastronomic" },
+            { word: "pâtisserie", definition: "pastry" }
+        ],
+        questions: [
+            {
+                question: "Quels ingrédients sont typiques de la cuisine normande?",
+                options: ["Huile d'olive et herbes", "Crème et pommes", "Vin et fromage"],
+                correct: 1
+            },
+            {
+                question: "Quel plat est mentionné comme un classique universel?",
+                options: ["Ratatouille", "Coq au vin", "Macarons"],
+                correct: 1
+            },
+            {
+                question: "Comment la cuisine française évolue-t-elle selon le texte?",
+                options: ["Elle abandonne ses traditions", "Elle intègre des influences internationales", "Elle se concentre uniquement sur la pâtisserie"],
+                correct: 1
+            }
+        ]
+    },
+    {
+        title: "Une journée à la bibliothèque",
+        level: "beginner",
+        text: "Hier, j'ai passé la journée à la bibliothèque de mon quartier. C'est un endroit calme avec beaucoup de livres. J'ai trouvé un livre d'aventures et un autre sur les animaux. J'ai lu pendant deux heures dans un fauteuil confortable près d'une fenêtre. Ensuite, j'ai emprunté un livre pour le lire chez moi. La bibliothécaire était très gentille et m'a aidé à choisir. Il y avait aussi des enfants qui regardaient des livres illustrés. À la fin, j'ai pris un café dans le petit café à côté de la bibliothèque. J'aime aller à la bibliothèque parce que c'est relaxant et inspirant.",
+        vocabulary: [
+            { word: "bibliothèque", definition: "library" },
+            { word: "calme", definition: "quiet" },
+            { word: "emprunter", definition: "to borrow" },
+            { word: "bibliothécaire", definition: "librarian" },
+            { word: "illustrés", definition: "illustrated" },
+            { word: "inspirant", definition: "inspiring" }
+        ],
+        questions: [
+            {
+                question: "Où le narrateur a-t-il passé la journée?",
+                options: ["Au musée", "À la bibliothèque", "Au parc"],
+                correct: 1
+            },
+            {
+                question: "Quels types de livres a-t-il trouvés?",
+                options: ["Des livres de cuisine", "Des livres d'aventures et sur les animaux", "Des livres de science"],
+                correct: 1
+            },
+            {
+                question: "Pourquoi le narrateur aime-t-il la bibliothèque?",
+                options: ["Parce qu’elle est bruyante", "Parce qu’elle est relaxante et inspirante", "Parce qu’elle sert des repas"],
+                correct: 1
+            }
+        ]
     }
 ];
 
