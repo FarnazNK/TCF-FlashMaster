@@ -234,3 +234,6 @@ export function loadReadingProgress() {
     }
     return [];
 }
+
+// Set the loaded flag after all exports
+window.readingLoaded = true;

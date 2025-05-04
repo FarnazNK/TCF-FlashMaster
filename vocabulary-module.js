@@ -176,3 +176,4 @@ export function filterByPronunciation(pattern) {
         word.pronunciation.toLowerCase().includes(term)
     );
 }
+window.vocabLoaded = true;

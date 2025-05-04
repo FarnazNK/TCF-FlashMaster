@@ -1,6 +1,12 @@
-// speaking-module.js - TCF French Speaking Module
+/**
+ * TCF French Speaking Module
+ * Contains speaking exercises, pronunciation activities, and utility functions for practice management.
+ */
 
-// Export speaking exercises and pronunciation activities
+/**
+ * Array of speaking exercises for TCF preparation across different levels.
+ * @type {Object[]}
+ */
 export const speakingExercises = [
     // A1/A2 Level - Beginner
     {
@@ -122,7 +128,7 @@ export const speakingExercises = [
         level: "advanced",
         time: 120,
         instructions: "Présentez une analyse structurée sur le sujet suivant : La mondialisation est-elle une force positive ou négative dans le monde contemporain ? Examinez les aspects économiques, culturels, environnementaux et sociaux de la question avant de présenter votre point de vue nuancé.",
-        example: "La mondialisation est un phénomène complexe qui suscite des débats passionnés. Sur le plan économique, elle a permis l'expansion des marchés et la création de richesses, notamment dans des pays émergents comme la Chine et l'Inde. Le commerce international a favorisé la baisse des prix pour les consommateurs et a stimulé l'innovation grâce à la concurrence. Néanmoins, elle a également entraîné des délocalisations massives dans les pays développés, aggravant les inégalités sociales et la précarité de certains travailleurs.\n\nConcernant l'aspect culturel, la mondialisation facilite les échanges culturels et l'accès à une diversité de produits culturels venus du monde entier. Toutefois, elle est souvent accusée de provoquer une homogénéisation culturelle, dominée par les modèles occidentaux, au détriment des cultures locales et minoritaires.\n\nSur le plan environnemental, le bilan est particulièrement préoccupant. L'augmentation des transports internationaux et la course à la production ont un impact considérable sur les émissions de gaz à effet de serre et l'épuisement des ressources naturelles. Les accords internationaux peinent à réguler efficacement ces problématiques.\n\nQuant aux enjeux sociaux, si la mondialisation a contribué à sortir des millions de personnes de la pauvreté dans certaines régions du monde, elle a aussi creusé les écarts de richesse, tant entre les pays qu'à l'intérieur de ceux-ci.\n\nFace à ce tableau nuancé, je considère que la mondialisation n'est en soi ni positive ni négative, mais que son impact dépend essentiellement de la manière dont elle est régulée. Une mondialisation sans garde-fous conduit inévitablement à des dérives économiques, sociales et environnementales. En revanche, encadrée par des institutions internationales efficaces et des politiques nationales adaptées, elle peut devenir un vecteur de progrès partagé. L'enjeu actuel n'est donc pas de rejeter la mondialisation, mais de la réformer en profondeur pour la mettre au service d'un développement véritablement durable et équitable.",
+        example: "La mondialisation est un phénomène complexe qui suscite des débats passionnés. Sur le plan économique, elle a permis l'expansion des marchés et la création de richesses, notamment dans des pays émergents comme la Chine et l'Inde. Le commerce international a favorisé la baisse des prix pour les consommateurs et a stimulé l'innovation grâce à la concurrence. Néanmoins, elle a également entraîné des délocalisations massives dans les pays développés, aggravant les inégalités sociales et la précarité de certains travailleurs.\n\nConcernant l'aspect culturel, la mondialisation facilite les échanges culturels et l'accès à une diversité de produits culturels venus du monde entier. Toutefois, elle est souvent accusée de provoquer une homogénéisation culturelle, dominée par les modèles occidentaux, au détriment des cultures locales et minoritaires.\n\nSur le plan environnemental, le bilan est particulièrement préoccupant. L'augmentation des transports internationaux et la course à la production ont un impact considérable sur les émissions de gaz à effet de serre et l'épuisement des ressources naturelles. Les accords internationaux peinent à réguler efficacement ces problématiques.\n\nQuant aux enjeux sociaux, si la mondialisation a contribué à sortir des millions de personnes de la pauvreté dans certaines régions du monde, elle a aussi creusé les écarts de richesse, tant entre les pays qu'à l'intérieur de ceux-ci.\n\nFace à ce tableau nuancé, je considère que la mondialisation n'est en soi ni positive ni négative, mais que son impact dépend essentiellement de la manière dont elle est régulée. Une mondialisation sans garde-fous conduit inévitablement à validity économique, sociale et environnementale. En revanche, encadrée par des institutions internationales efficaces et des politiques nationales adaptées, elle peut devenir un vecteur de progrès partagé. L'enjeu actuel n'est donc pas de rejeter la mondialisation, mais de la réformer en profondeur pour la mettre au service d'un développement véritablement durable et équitable.",
         exampleAudio: "example-se5.mp3",
         preparationPoints: [
             "Définition de la mondialisation",
@@ -176,7 +182,10 @@ export const speakingExercises = [
     }
 ];
 
-// Export pronunciation exercises
+/**
+ * Array of pronunciation exercises for TCF preparation across different levels.
+ * @type {Object[]}
+ */
 export const pronunciationExercises = [
     // Basic Sounds and Phonemes
     {
@@ -280,7 +289,7 @@ export const pronunciationExercises = [
             {
                 sound: "qu/c dur [k]",
                 examples: ["qui", "quand", "carte"],
-                phrase: "Quand Caroline a commencé à courir?",
+                phrase: "Quand Caroline a commencé à courir ?",
                 tips: "Son produit à l'arrière de la bouche."
             },
             {
@@ -297,7 +306,7 @@ export const pronunciationExercises = [
         id: "pe3",
         title: "Liaisons et Enchaînements",
         level: "intermediate",
-        instructions: "Pratiquez les liaisons et enchaînements, essentiels pour un français fluide. Répétez les phrases en faisant attention aux connections entre les mots.",
+        instructions: "Pratiquez les liaisons et enchaînements, essentiels pour un français fluide. Répétez les phrases en faisant attention aux connexions entre les mots.",
         exercises: [
             {
                 type: "Liaisons obligatoires",
@@ -540,13 +549,14 @@ export const pronunciationExercises = [
     }
 ];
 
-// Function to generate feedback for pronunciation based on recording
+/**
+ * Generates mock feedback for pronunciation based on the user's level.
+ * @param {string} level - The user's proficiency level (beginner, intermediate, advanced).
+ * @returns {Object} - Feedback object containing score and detailed feedback.
+ */
 export function generatePronunciationFeedback(level) {
-    // This is a mock function - in a real app, this would analyze the audio
-    // For now, we simulate feedback with random scores and comments
-    
     const score = Math.floor(Math.random() * 41) + 60; // Score between 60-100
-    
+
     const lowPoints = [
         "Prononciation des voyelles nasales",
         "Distinction entre [u] et [y]",
@@ -554,7 +564,7 @@ export function generatePronunciationFeedback(level) {
         "Intonation et rythme",
         "Liaisons et enchaînements"
     ];
-    
+
     const strongPoints = [
         "Prononciation des voyelles orales",
         "Articulation des consonnes",
@@ -562,14 +572,12 @@ export function generatePronunciationFeedback(level) {
         "Accentuation correcte des mots",
         "Respect des groupes rythmiques"
     ];
-    
-    // Select random points to highlight
+
     const weaknesses = getRandomItems(lowPoints, 2);
     const strengths = getRandomItems(strongPoints, 2);
-    
-    // Generate feedback based on level and score
+
     let detailedFeedback;
-    
+
     if (score >= 80) {
         detailedFeedback = `
             <p class="text-green-700 font-medium">Très bon travail ! Votre prononciation est claire et généralement correcte.</p>
@@ -618,34 +626,50 @@ export function generatePronunciationFeedback(level) {
             <p class="mt-2">Nous vous recommandons de commencer par des exercices de base sur les voyelles et consonnes françaises.</p>
         `;
     }
-    
+
     return {
-        score: score,
-        detailedFeedback: detailedFeedback
+        score,
+        detailedFeedback
     };
 }
 
-// Helper function to get random items from an array
+/**
+ * Helper function to get random items from an array.
+ * @param {string[]} array - The source array.
+ * @param {number} count - Number of items to select.
+ * @returns {string[]} - Array of randomly selected items.
+ */
 function getRandomItems(array, count) {
-    let shuffled = [...array].sort(() => 0.5 - Math.random());
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
 
-// Function to save speaking practice results
+/**
+ * Saves speaking practice results to localStorage.
+ * @param {Object} practiceData - The practice data to save.
+ */
 export function saveSpeakingPractice(practiceData) {
-    let savedPractices = loadSavedPractices();
-    savedPractices.push(practiceData);
-    localStorage.setItem('tcfSpeakingPractices', JSON.stringify(savedPractices));
-}
-
-// Function to load saved speaking practices
-export function loadSavedPractices() {
-    const savedData = localStorage.getItem('tcfSpeakingPractices');
-    if (savedData) {
-        return JSON.parse(savedData);
+    try {
+        const savedPractices = loadSavedPractices();
+        savedPractices.push(practiceData);
+        localStorage.setItem('tcfSpeakingPractices', JSON.stringify(savedPractices));
+    } catch (error) {
+        console.error('Error saving speaking practice:', error);
     }
-    return [];
 }
 
-// Export speaking progress data for the module status check
+/**
+ * Loads saved speaking practices from localStorage.
+ * @returns {Object[]} - Array of saved practice data.
+ */
+export function loadSavedPractices() {
+    try {
+        const savedData = localStorage.getItem('tcfSpeakingPractices');
+        return savedData ? JSON.parse(savedData) : [];
+    } catch (error) {
+        console.error('Error loading saved practices:', error);
+        return [];
+    }
+}
+
 window.speakingLoaded = true;
