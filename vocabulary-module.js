@@ -1,6 +1,6 @@
 // vocabulary-module.js - TCF French Vocabulary Module
 
-// Export the vocabulary list with categories and pronunciations
+// Export the vocabulary list with categories, pronunciations, and conjugations for verbs
 export const vocabulary = [
     // Basic vocabulary
     { french: "bonjour", english: "hello", category: "basic", pronunciation: "bohn-zhoor" },
@@ -17,7 +17,24 @@ export const vocabulary = [
     { french: "à bientôt", english: "see you soon", category: "basic", pronunciation: "ah bee-yan-toh" },
     { french: "bonsoir", english: "good evening", category: "basic", pronunciation: "bohn-swahr" },
     { french: "bonne nuit", english: "good night", category: "basic", pronunciation: "bun nwee" },
-    
+    // Added verbs from beginner passages
+    { french: "admirer", english: "to admire", category: "basic", pronunciation: "ad-mee-ray", conjugations: { je: "j’admire", tu: "tu admires", il: "il admire", elle: "elle admire" } },
+    { french: "aller", english: "to go", category: "basic", pronunciation: "ah-lay", conjugations: { je: "je vais", tu: "tu vas", il: "il va", elle: "elle va" } },
+    { french: "avoir", english: "to have", category: "basic", pronunciation: "ah-vwahr", conjugations: { je: "j’ai", tu: "tu as", il: "il a", elle: "elle a" } },
+    { french: "briller", english: "to shine", category: "basic", pronunciation: "bree-yay", conjugations: { je: "je brille", tu: "tu brilles", il: "il brille", elle: "elle brille" } },
+    { french: "changer", english: "to change", category: "basic", pronunciation: "shahn-zhay", conjugations: { je: "je change", tu: "tu changes", il: "il change", elle: "elle change" } },
+    { french: "être", english: "to be", category: "basic", pronunciation: "eh-truh", conjugations: { je: "je suis", tu: "tu es", il: "il est", elle: "elle est" } },
+    { french: "faire", english: "to do/make", category: "basic", pronunciation: "fehr", conjugations: { je: "je fais", tu: "tu fais", il: "il fait", elle: "elle fait" } },
+    { french: "monter", english: "to climb up", category: "basic", pronunciation: "mohn-tay", conjugations: { je: "je monte", tu: "tu montes", il: "il monte", elle: "elle monte" } },
+    { french: "nager", english: "to swim", category: "basic", pronunciation: "nah-zhay", conjugations: { je: "je nage", tu: "tu nages", il: "il nage", elle: "elle nage" } },
+    { french: "neiger", english: "to snow", category: "basic", pronunciation: "neh-zhay", conjugations: { je: "je neige", tu: "tu neiges", il: "il neige", elle: "elle neige" } },
+    { french: "préférer", english: "to prefer", category: "basic", pronunciation: "pray-feh-ray", conjugations: { je: "je préfère", tu: "tu préfères", il: "il préfère", elle: "elle préfère" } },
+    { french: "s’appeler", english: "to be called", category: "basic", pronunciation: "sah-peh-lay", conjugations: { je: "je m’appelle", tu: "tu t’appelles", il: "il s’appelle", elle: "elle s’appelle" } },
+    { french: "se promener", english: "to walk around", category: "basic", pronunciation: "suh proh-muh-nay", conjugations: { je: "je me promène", tu: "tu te promènes", il: "il se promène", elle: "elle se promène" } },
+    { french: "tomber", english: "to fall", category: "basic", pronunciation: "tohm-bay", conjugations: { je: "je tombe", tu: "tu tombes", il: "il tombe", elle: "elle tombe" } },
+    { french: "visiter", english: "to visit", category: "basic", pronunciation: "vee-zee-tay", conjugations: { je: "je visite", tu: "tu visites", il: "il visite", elle: "elle visite" } },
+    { french: "voir", english: "to see", category: "basic", pronunciation: "vwahr", conjugations: { je: "je vois", tu: "tu vois", il: "il voit", elle: "elle voit" } },
+
     // Daily life
     { french: "maison", english: "house", category: "daily", pronunciation: "meh-zohn" },
     { french: "famille", english: "family", category: "daily", pronunciation: "fah-mee" },
@@ -39,10 +56,30 @@ export const vocabulary = [
     { french: "garage", english: "garage", category: "daily", pronunciation: "gah-rahzh" },
     { french: "grenier", english: "attic", category: "daily", pronunciation: "gruh-nyay" },
     { french: "cave", english: "cellar", category: "daily", pronunciation: "kahv" },
-    
+    // Added verbs from elementary passages
+    { french: "aider", english: "to help", category: "daily", pronunciation: "ay-day", conjugations: { je: "j’aide", tu: "tu aides", il: "il aide", elle: "elle aide" } },
+    { french: "adorer", english: "to adore", category: "daily", pronunciation: "ah-doh-ray", conjugations: { je: "j’adore", tu: "tu adores", il: "il adore", elle: "elle adore" } },
+    { french: "aimer", english: "to love/like", category: "daily", pronunciation: "eh-may", conjugations: { je: "j’aime", tu: "tu aimes", il: "il aime", elle: "elle aime" } },
+    { french: "cultiver", english: "to cultivate", category: "daily", pronunciation: "kool-tee-vay", conjugations: { je: "je cultive", tu: "tu cultives", il: "il cultive", elle: "elle cultive" } },
+    { french: "donner", english: "to give", category: "daily", pronunciation: "doh-nay", conjugations: { je: "je donne", tu: "tu donnes", il: "il donne", elle: "elle donne" } },
+    { french: "habiter", english: "to live", category: "daily", pronunciation: "ah-bee-tay", conjugations: { je: "j’habite", tu: "tu habites", il: "il habite", elle: "elle habite" } },
+    { french: "partir", english: "to leave", category: "daily", pronunciation: "par-teer", conjugations: { je: "je pars", tu: "tu pars", il: "il part", elle: "elle part" } },
+    { french: "pousser", english: "to grow/push", category: "daily", pronunciation: "poo-say", conjugations: { je: "je pousse", tu: "tu pousses", il: "il pousse", elle: "elle pousse" } },
+    { french: "préparer", english: "to prepare", category: "daily", pronunciation: "pray-pah-ray", conjugations: { je: "je prépare", tu: "tu prépares", il: "il prépare", elle: "elle prépare" } },
+    { french: "rentrer", english: "to return home", category: "daily", pronunciation: "rahn-tray", conjugations: { je: "je rentre", tu: "tu rentres", il: "il rentre", elle: "elle rentre" } },
+    { french: "retourner", english: "to return", category: "daily", pronunciation: "ruh-toor-nay", conjugations: { je: "je retourne", tu: "tu retournes", il: "il retourne", elle: "elle retourne" } },
+    { french: "s’entraider", english: "to help each other", category: "daily", pronunciation: "sahn-tray-day", conjugations: { je: "je m’entraide", tu: "tu t’entraides", il: "il s’entraide", elle: "elle s’entraide" } },
+    { french: "s’habiller", english: "to get dressed", category: "daily", pronunciation: "sah-bee-yay", conjugations: { je: "je m’habille", tu: "tu t’habilles", il: "il s’habille", elle: "elle s’habille" } },
+    { french: "se brosser", english: "to brush", category: "daily", pronunciation: "suh broh-say", conjugations: { je: "je me brosse", tu: "tu te brosses", il: "il se brosse", elle: "elle se brosse" } },
+    { french: "se coucher", english: "to go to bed", category: "daily", pronunciation: "suh koo-shay", conjugations: { je: "je me couche", tu: "tu te couches", il: "il se couche", elle: "elle se couche" } },
+    { french: "se lever", english: "to get up", category: "daily", pronunciation: "suh leh-vay", conjugations: { je: "je me lève", tu: "tu te lèves", il: "il se lève", elle: "elle se lève" } },
+    { french: "se réveiller", english: "to wake up", category: "daily", pronunciation: "suh ray-vay-yay", conjugations: { je: "je me réveille", tu: "tu te réveilles", il: "il se réveille", elle: "elle se réveille" } },
+    { french: "travailler", english: "to work", category: "daily", pronunciation: "trah-vah-yay", conjugations: { je: "je travaille", tu: "tu travailles", il: "il travaille", elle: "elle travaille" } },
+    { french: "vivre", english: "to live", category: "daily", pronunciation: "veev-ruh", conjugations: { je: "je vis", tu: "tu vis", il: "il vit", elle: "elle vit" } },
+
     // Food
-    { french: "manger", english: "to eat", category: "food", pronunciation: "mahn-zhay" },
-    { french: "boire", english: "to drink", category: "food", pronunciation: "bwahr" },
+    { french: "manger", english: "to eat", category: "food", pronunciation: "mahn-zhay", conjugations: { je: "je mange", tu: "tu manges", il: "il mange", elle: "elle mange" } },
+    { french: "boire", english: "to drink", category: "food", pronunciation: "bwahr", conjugations: { je: "je bois", tu: "tu bois", il: "il boit", elle: "elle boit" } },
     { french: "eau", english: "water", category: "food", pronunciation: "oh" },
     { french: "pain", english: "bread", category: "food", pronunciation: "pan" },
     { french: "fromage", english: "cheese", category: "food", pronunciation: "froh-mahzh" },
@@ -71,7 +108,12 @@ export const vocabulary = [
     { french: "menu", english: "menu", category: "food", pronunciation: "muh-noo" },
     { french: "addition", english: "bill", category: "food", pronunciation: "ah-dee-syohn" },
     { french: "réservation", english: "reservation", category: "food", pronunciation: "ray-sehr-vah-syohn" },
-    
+    // Added verbs from elementary passages
+    { french: "commander", english: "to order", category: "food", pronunciation: "koh-mahn-day", conjugations: { je: "je commande", tu: "tu commandes", il: "il commande", elle: "elle commande" } },
+    { french: "goûter", english: "to taste", category: "food", pronunciation: "goo-tay", conjugations: { je: "je goûte", tu: "tu goûtes", il: "il goûte", elle: "elle goûte" } },
+    { french: "payer", english: "to pay", category: "food", pronunciation: "pay-yay", conjugations: { je: "je paie", tu: "tu paies", il: "il paie", elle: "elle paie" } },
+    { french: "prendre", english: "to take", category: "food", pronunciation: "prahn-druh", conjugations: { je: "je prends", tu: "tu prends", il: "il prend", elle: "elle prend" } },
+
     // Nature
     { french: "jardin", english: "garden", category: "nature", pronunciation: "zhar-dan" },
     { french: "fleur", english: "flower", category: "nature", pronunciation: "flur" },
@@ -97,7 +139,7 @@ export const vocabulary = [
     { french: "neige", english: "snow", category: "nature", pronunciation: "nezh" },
     { french: "nuage", english: "cloud", category: "nature", pronunciation: "noo-ahzh" },
     { french: "orage", english: "storm", category: "nature", pronunciation: "oh-rahzh" },
-    
+
     // Travel
     { french: "ville", english: "city", category: "travel", pronunciation: "veel" },
     { french: "village", english: "village", category: "travel", pronunciation: "vee-lazh" },
@@ -129,7 +171,12 @@ export const vocabulary = [
     { french: "guide", english: "guide", category: "travel", pronunciation: "geed" },
     { french: "monument", english: "monument", category: "travel", pronunciation: "moh-noo-mahn" },
     { french: "musée", english: "museum", category: "travel", pronunciation: "moo-zay" },
-    
+    // Added verbs from intermediate passages
+    { french: "passer", english: "to pass/spend time", category: "travel", pronunciation: "pah-say", conjugations: { je: "je passe", tu: "tu passes", il: "il passe", elle: "elle passe" } },
+    { french: "profiter", english: "to enjoy/take advantage", category: "travel", pronunciation: "proh-fee-tay", conjugations: { je: "je profite", tu: "tu profites", il: "il profite", elle: "elle profite" } },
+    { french: "se reposer", english: "to rest", category: "travel", pronunciation: "suh ruh-poh-zay", conjugations: { je: "je me repose", tu: "tu te reposes", il: "il se repose", elle: "elle se repose" } },
+    { french: "traverser", english: "to cross", category: "travel", pronunciation: "trah-ver-say", conjugations: { je: "je traverse", tu: "tu traverses", il: "il traverse", elle: "elle traverse" } },
+
     // Work
     { french: "médecin", english: "doctor", category: "work", pronunciation: "mayd-san" },
     { french: "infirmier", english: "nurse", category: "work", pronunciation: "an-feer-myay" },
@@ -159,17 +206,17 @@ export const vocabulary = [
     { french: "entretien", english: "interview", category: "work", pronunciation: "ahn-truh-tyan" },
     { french: "carrière", english: "career", category: "work", pronunciation: "kah-ryehr" },
     { french: "promotion", english: "promotion", category: "work", pronunciation: "proh-moh-syohn" },
-    
+
     // Intermediate vocabulary
     { french: "écouter", english: "to listen", category: "intermediate", pronunciation: "ay-koo-tay" },
     { french: "parler", english: "to speak", category: "intermediate", pronunciation: "par-lay" },
-    { french: "lire", english: "to read", category: "intermediate", pronunciation: "leer" },
+    { french: "lire", english: "to read", category: "intermediate", pronunciation: "leer", conjugations: { je: "je lis", tu: "tu lis", il: "il lit", elle: "elle lit" } },
     { french: "écrire", english: "to write", category: "intermediate", pronunciation: "ay-kreer" },
     { french: "comprendre", english: "to understand", category: "intermediate", pronunciation: "kom-prahn-druh" },
-    { french: "apprendre", english: "to learn", category: "intermediate", pronunciation: "ah-prahn-druh" },
-    { french: "jouer", english: "to play", category: "intermediate", pronunciation: "zhoo-ay" },
+    { french: "apprendre", english: "to learn", category: "intermediate", pronunciation: "ah-prahn-druh", conjugations: { je: "j’apprends", tu: "tu apprends", il: "il apprend", elle: "elle apprend" } },
+    { french: "jouer", english: "to play", category: "intermediate", pronunciation: "zhoo-ay", conjugations: { je: "je joue", tu: "tu joues", il: "il joue", elle: "elle joue" } },
     { french: "courir", english: "to run", category: "intermediate", pronunciation: "koo-reer" },
-    { french: "marcher", english: "to walk", category: "intermediate", pronunciation: "mar-shay" },
+    { french: "marcher", english: "to walk", category: "intermediate", pronunciation: "mar-shay", conjugations: { je: "je marche", tu: "tu marches", il: "il marche", elle: "elle marche" } },
     { french: "voyager", english: "to travel", category: "intermediate", pronunciation: "vwah-yah-zhay" },
     { french: "développement", english: "development", category: "intermediate", pronunciation: "day-vuh-lop-mahn" },
     { french: "environnement", english: "environment", category: "intermediate", pronunciation: "ahn-vee-ron-mahn" },
@@ -182,16 +229,23 @@ export const vocabulary = [
     { french: "prêter", english: "to lend", category: "intermediate", pronunciation: "preh-tay" },
     { french: "envoyer", english: "to send", category: "intermediate", pronunciation: "ahn-vwah-yay" },
     { french: "recevoir", english: "to receive", category: "intermediate", pronunciation: "ruh-suh-vwahr" },
-    { french: "commencer", english: "to begin", category: "intermediate", pronunciation: "koh-mahn-say" },
+    { french: "commencer", english: "to begin", category: "intermediate", pronunciation: "koh-mahn-say", conjugations: { je: "je commence", tu: "tu commences", il: "il commence", elle: "elle commence" } },
     { french: "finir", english: "to finish", category: "intermediate", pronunciation: "fee-neer" },
-    { french: "choisir", english: "to choose", category: "intermediate", pronunciation: "shwah-zeer" },
-    { french: "décider", english: "to decide", category: "intermediate", pronunciation: "day-see-day" },
+    { french: "choisir", english: "to choose", category: "intermediate", pronunciation: "shwah-zeer", conjugations: { je: "je choisis", tu: "tu choisis", il: "il choisit", elle: "elle choisit" } },
+    { french: "décider", english: "to decide", category: "intermediate", pronunciation: "day-see-day", conjugations: { je: "je décide", tu: "tu décides", il: "il décide", elle: "elle décide" } },
     { french: "sentir", english: "to feel", category: "intermediate", pronunciation: "sahn-teer" },
     { french: "penser", english: "to think", category: "intermediate", pronunciation: "pahn-say" },
     { french: "croire", english: "to believe", category: "intermediate", pronunciation: "krwahr" },
     { french: "savoir", english: "to know (fact)", category: "intermediate", pronunciation: "sah-vwahr" },
     { french: "connaître", english: "to know (person/place)", category: "intermediate", pronunciation: "koh-neh-truh" },
-    
+    // Added verbs from intermediate passages
+    { french: "célébrer", english: "to celebrate", category: "intermediate", pronunciation: "say-leh-bray", conjugations: { je: "je célèbre", tu: "tu célèbres", il: "il célèbre", elle: "elle célèbre" } },
+    { french: "découvrir", english: "to discover", category: "intermediate", pronunciation: "day-koo-vreer", conjugations: { je: "je découvre", tu: "tu découvres", il: "il découvre", elle: "elle découvre" } },
+    { french: "devoir", english: "to have to/must", category: "intermediate", pronunciation: "duh-vwahr", conjugations: { je: "je dois", tu: "tu dois", il: "il doit", elle: "elle doit" } },
+    { french: "permettre", english: "to allow", category: "intermediate", pronunciation: "pehr-meh-truh", conjugations: { je: "je permets", tu: "tu permets", il: "il permet", elle: "elle permet" } },
+    { french: "pouvoir", english: "to be able to", category: "intermediate", pronunciation: "poo-vwahr", conjugations: { je: "je peux", tu: "tu peux", il: "il peut", elle: "elle peut" } },
+    { french: "ressentir", english: "to feel", category: "intermediate", pronunciation: "ruh-sahn-teer", conjugations: { je: "je ressens", tu: "tu ressens", il: "il ressent", elle: "elle ressent" } },
+
     // Advanced vocabulary
     { french: "conséquence", english: "consequence", category: "advanced", pronunciation: "kon-say-kahns" },
     { french: "perspective", english: "perspective", category: "advanced", pronunciation: "pehr-spek-teev" },
@@ -223,7 +277,31 @@ export const vocabulary = [
     { french: "paradoxe", english: "paradox", category: "advanced", pronunciation: "pah-rah-doks" },
     { french: "synergie", english: "synergy", category: "advanced", pronunciation: "see-nehr-zhee" },
     { french: "tacite", english: "tacit", category: "advanced", pronunciation: "tah-seet" },
-    
+    // Added verbs from upperIntermediate passages
+    { french: "absorber", english: "to absorb", category: "advanced", pronunciation: "ab-sor-bay", conjugations: { je: "j’absorbe", tu: "tu absorbes", il: "il absorbe", elle: "elle absorbe" } },
+    { french: "adopter", english: "to adopt", category: "advanced", pronunciation: "ah-dop-tay", conjugations: { je: "j’adopte", tu: "tu adoptes", il: "il adopte", elle: "elle adopte" } },
+    { french: "augmenter", english: "to increase", category: "advanced", pronunciation: "ohg-mahn-tay", conjugations: { je: "j’augmente", tu: "tu augmentes", il: "il augmente", elle: "elle augmente" } },
+    { french: "capturer", english: "to capture", category: "advanced", pronunciation: "kap-too-ray", conjugations: { je: "je capture", tu: "tu captures", il: "il capture", elle: "elle capture" } },
+    { french: "consommer", english: "to consume", category: "advanced", pronunciation: "kon-soh-may", conjugations: { je: "je consomme", tu: "tu consommes", il: "il consomme", elle: "elle consomme" } },
+    { french: "contribuer", english: "to contribute", category: "advanced", pronunciation: "kon-tree-boo-ay", conjugations: { je: "je contribue", tu: "tu contribues", il: "il contribue", elle: "elle contribue" } },
+    { french: "dominer", english: "to dominate", category: "advanced", pronunciation: "doh-mee-nay", conjugations: { je: "je domine", tu: "tu domines", il: "il domine", elle: "elle domine" } },
+    { french: "économiser", english: "to save", category: "advanced", pronunciation: "ay-koh-noh-mee-zay", conjugations: { je: "j’économise", tu: "tu économises", il: "il économise", elle: "elle économise" } },
+    { french: "enseigner", english: "to teach", category: "advanced", pronunciation: "ahn-sayn-yay", conjugations: { je: "j’enseigne", tu: "tu enseignes", il: "il enseigne", elle: "elle enseigne" } },
+    { french: "entraîner", english: "to cause/lead to", category: "advanced", pronunciation: "ahn-tray-nay", conjugations: { je: "j’entraîne", tu: "tu entraînes", il: "il entraîne", elle: "elle entraîne" } },
+    { french: "introduire", english: "to introduce", category: "advanced", pronunciation: "an-troh-dweer", conjugations: { je: "j’introduis", tu: "tu introduis", il: "il introduit", elle: "elle introduit" } },
+    { french: "lutter", english: "to fight/struggle", category: "advanced", pronunciation: "loo-tay", conjugations: { je: "je lutte", tu: "tu luttes", il: "il lutte", elle: "elle lutte" } },
+    { french: "marquer", english: "to mark", category: "advanced", pronunciation: "mar-kay", conjugations: { je: "je marque", tu: "tu marques", il: "il marque", elle: "elle marque" } },
+    { french: "orner", english: "to decorate/adorn", category: "advanced", pronunciation: "or-nay", conjugations: { je: "j’orne", tu: "tu ornes", il: "il orne", elle: "elle orne" } },
+    { french: "poser", english: "to pose/ask", category: "advanced", pronunciation: "poh-zay", conjugations: { je: "je pose", tu: "tu poses", il: "il pose", elle: "elle pose" } },
+    { french: "produire", english: "to produce", category: "advanced", pronunciation: "proh-dweer", conjugations: { je: "je produis", tu: "tu produis", il: "il produit", elle: "elle produit" } },
+    { french: "protéger", english: "to protect", category: "advanced", pronunciation: "proh-tay-zhay", conjugations: { je: "je protège", tu: "tu protèges", il: "il protège", elle: "elle protège" } },
+    { french: "réduire", english: "to reduce", category: "advanced", pronunciation: "ray-dweer", conjugations: { je: "je réduis", tu: "tu réduis", il: "il réduit", elle: "elle réduit" } },
+    { french: "refléter", english: "to reflect", category: "advanced", pronunciation: "ruh-flay-tay", conjugations: { je: "je reflète", tu: "tu reflètes", il: "il reflète", elle: "elle reflète" } },
+    { french: "représenter", english: "to represent", category: "advanced", pronunciation: "ruh-pray-zahn-tay", conjugations: { je: "je représente", tu: "tu représentes", il: "il représente", elle: "elle représente" } },
+    { french: "rester", english: "to stay", category: "advanced", pronunciation: "res-tay", conjugations: { je: "je reste", tu: "tu restes", il: "il reste", elle: "elle reste" } },
+    { french: "rompre", english: "to break", category: "advanced", pronunciation: "rohm-pruh", conjugations: { je: "je romps", tu: "tu romps", il: "il rompt", elle: "elle rompt" } },
+    { french: "utiliser", english: "to use", category: "advanced", pronunciation: "oo-tee-lee-zay", conjugations: { je: "j’utilise", tu: "tu utilises", il: "il utilise", elle: "elle utilise" } },
+
     // Emotions
     { french: "heureux", english: "happy", category: "emotions", pronunciation: "uh-ruh" },
     { french: "triste", english: "sad", category: "emotions", pronunciation: "treest" },
@@ -240,7 +318,7 @@ export const vocabulary = [
     { french: "curieux", english: "curious", category: "emotions", pronunciation: "koo-ryuh" },
     { french: "fier", english: "proud", category: "emotions", pronunciation: "fyehr" },
     { french: "embarrassé", english: "embarrassed", category: "emotions", pronunciation: "ahm-bah-rah-say" },
-    
+
     // Time expressions
     { french: "aujourd'hui", english: "today", category: "time", pronunciation: "oh-zhoor-dwee" },
     { french: "demain", english: "tomorrow", category: "time", pronunciation: "duh-man" },
@@ -441,25 +519,23 @@ export function getVocabularyByLevel(level) {
     return vocabulary.filter(word => categories.includes(word.category));
 }
 
-// Get conjugation examples (simplified, just for reference)
+// Get conjugation examples
 export function getConjugationExamples(verb) {
-    // This is a simplified example - in a real app, you'd have a more complete conjugation database
+    // First, check if the verb exists in the vocabulary array with conjugations
+    const vocabEntry = vocabulary.find(item => item.french.toLowerCase() === verb.toLowerCase());
+    if (vocabEntry && vocabEntry.conjugations) {
+        return {
+            present: [
+                vocabEntry.conjugations.je,
+                vocabEntry.conjugations.tu,
+                vocabEntry.conjugations.il,
+                vocabEntry.conjugations.elle
+            ]
+        };
+    }
+
+    // Fallback to hardcoded conjugations for verbs not in vocabulary
     const commonVerbs = {
-        'être': {
-            present: ['je suis', 'tu es', 'il/elle est', 'nous sommes', 'vous êtes', 'ils/elles sont'],
-            past: ['j\'étais', 'tu étais', 'il/elle était', 'nous étions', 'vous étiez', 'ils/elles étaient'],
-            future: ['je serai', 'tu seras', 'il/elle sera', 'nous serons', 'vous serez', 'ils/elles seront']
-        },
-        'avoir': {
-            present: ['j\'ai', 'tu as', 'il/elle a', 'nous avons', 'vous avez', 'ils/elles ont'],
-            past: ['j\'avais', 'tu avais', 'il/elle avait', 'nous avions', 'vous aviez', 'ils/elles avaient'],
-            future: ['j\'aurai', 'tu auras', 'il/elle aura', 'nous aurons', 'vous aurez', 'ils/elles auront']
-        },
-        'aller': {
-            present: ['je vais', 'tu vas', 'il/elle va', 'nous allons', 'vous allez', 'ils/elles vont'],
-            past: ['j\'allais', 'tu allais', 'il/elle allait', 'nous allions', 'vous alliez', 'ils/elles allaient'],
-            future: ['j\'irai', 'tu iras', 'il/elle ira', 'nous irons', 'vous irez', 'ils/elles iront']
-        },
         'parler': {
             present: ['je parle', 'tu parles', 'il/elle parle', 'nous parlons', 'vous parlez', 'ils/elles parlent'],
             past: ['je parlais', 'tu parlais', 'il/elle parlait', 'nous parlions', 'vous parliez', 'ils/elles parlaient'],
@@ -472,7 +548,6 @@ export function getConjugationExamples(verb) {
         }
     };
     
-    // Attempt to find the verb or return a "not found" response
     return commonVerbs[verb.toLowerCase()] || null;
 }
 
